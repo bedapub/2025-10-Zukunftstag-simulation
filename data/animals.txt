@@ -1,0 +1,30 @@
+Abenteuerlustiger Adler:adventurous eagle
+Braver Bär:brave bear
+Cleverer Chinchilla:clever chinchilla
+Dankbarer Dackel:grateful dachshund
+Eleganter Elefant:elegant elephant
+Freundliches Frettchen:friendly ferret
+Fröhlicher Fuchs:cheerful fox
+Glückliches Gänschen:happy little goose
+Goldiger Goldfisch:adorable goldfish
+Heiteres Huhn:merry chicken
+Hilfsbereiter Hase:helpful hare
+Interessantes Igelchen:interesting little hedgehog
+Jovialer Jaguar:jovial jaguar
+Kluges Kätzchen:clever kitten
+Lebenslustiger Löwe:lively lion
+Mutiger Marienkäfer:brave ladybug
+Neugieriges Nilpferd:curious hippo
+Offenes Otterchen:open-minded little otter
+Putziger Pinguin:cute penguin
+Quicklebendiges Quokka:spirited quokka
+Ruhiges Reh:calm deer
+Sanfter Schwan:gentle swan
+Treuer Tukan:loyal toucan
+Umsichtiger Uhu:cautious owl
+Verspieltes Vögelchen:playful little bird
+Wunderbarer Wolf:wonderful wolf
+Xenialer Xerus:hospitable African ground squirrel
+Yogafreundlicher Yak:peaceful yak
+Zärtlicher Ziegenbock:tender goat
+Zauberhaftes Zebra:enchanting zebra
