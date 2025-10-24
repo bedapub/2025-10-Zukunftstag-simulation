@@ -15,7 +15,7 @@ pyenv install 3.11.0
 pyenv local 3.11.0
 poetry init
 poetry add numpy pandas matplotlib itables
-poetry add -D jupyterlab ## libraries for development use only
+poetry add -D jupyter jupyterlab
 poetry install --no-root
 ```
 
@@ -24,4 +24,9 @@ Once this is done, you will have a local installation of the Python version 3.11
 ## Run the script
 
 ```
-poetry run jupyter-lab 
+poetry run jupyter-lab 2025-10-Zukunftstag-simulation.ipynb
+```
+
+## Trouble shooting
+
+* Install `sudo apt-get install libsqlite3-dev` in Debian before installing Python with pyenv, in case the error `No module named _sqlite3` pops up. See [stackoverflow](https://stackoverflow.com/questions/1210664/no-module-named-sqlite3)
