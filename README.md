@@ -2,7 +2,11 @@ Simulation of the workshop *Mathe Macht Medikamente*
 ===
 Roche's Zukunftstag 2025
 
-## Setup
+## Setup the dependencies
+
+I tried two ways to setup the dependencies, i.e. the packages required by the Jupyter notebook, and either should work. You can choose whichever that fits you.
+
+### Alternative 1: Use `pyenv` and `poetry`
 
 Make sure you install [pyenv](https://github.com/pyenv/pyenv), which manages the Python version, and [poetry](https://python-poetry.org/docs/basic-usage/), which manages package dependencies.
 
@@ -20,6 +24,15 @@ poetry install --no-root
 ```
 
 Once this is done, you will have a local installation of the Python version 3.11.0, and all packages required to run the simulation.
+
+### Alternative 2: Use `conda`
+
+```
+conda create -n zukunfstag2025 -c conda-forge numpy pandas matplotlib itables jupyter jupyterlab seaborn
+conda activate zukunftstag2025
+```
+
+When I set up my environment, I used the Alternative 1.
 
 ## Run the script
 
