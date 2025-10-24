@@ -14,9 +14,12 @@ itables = "^2.5.2"
 numpy = "^2.3.4"
 matplotlib = "^3.10.7"
 ipykernel = "^7.0.1"
+jupyter = "^1.1.1"
 
 
 [tool.poetry.group.dev.dependencies]
+jupyter = "^1.1.1"
+jupyterlab = "^4.4.10"
 
 [build-system]
 requires = ["poetry-core"]
