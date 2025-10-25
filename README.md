@@ -6,7 +6,7 @@ Roche's Zukunftstag 2025
 
 I tried two ways to setup the dependencies, i.e. the packages required by the Jupyter notebook, and either should work. You can choose whichever that fits you.
 
-### Alternative 1: Use `pyenv` and `poetry`
+### Alternative 1 and the solution that I used: Use `pyenv` and `poetry`
 
 Make sure you install [pyenv](https://github.com/pyenv/pyenv), which manages the Python version, and [poetry](https://python-poetry.org/docs/basic-usage/), which manages package dependencies.
 
@@ -27,12 +27,14 @@ Once this is done, you will have a local installation of the Python version 3.11
 
 ### Alternative 2: Use `conda`
 
+One could use conda as well
+
 ```
-conda create -n zukunfstag2025 -c conda-forge numpy pandas matplotlib itables jupyter jupyterlab seaborn
+conda create -n zukunfstag2025 -c conda-forge numpy pandas matplotlib itables jupyter jupyterlab seaborn mplcursors pyqt5 ## the package list is NOT updated, you may have to adjust it
 conda activate zukunftstag2025
 ```
 
-When I set up my environment, I used the Alternative 1.
+When I set up my environment, I used the combination of `pyenv` and `poetry`.
 
 ## Run the script
 
