@@ -1,0 +1,30 @@
+Actemra:Rheumatoid arthritis
+Alecensa:ALK-positive NSCLC
+Avastin:Various cancers
+CellCept:Organ transplant rejection
+Columvi:Large B-cell lymphoma
+Cotellic:Melanoma
+Enspryng:Neuromyelitis optica spectrum disorder
+Erivedge:Basal cell carcinoma
+Esbriet:Idiopathic pulmonary fibrosis
+Evrysdi:Spinal muscular atrophy
+Fuzeon:HIV-1 infection
+Gazyva:CLL, follicular lymphoma
+Hemlibra:Hemophilia A
+Herceptin:HER2-positive breast/gastric cancer
+MabThera:NHL, CLL, rheumatoid arthritis
+Polivy:Diffuse large B-cell lymphoma
+Perjeta:HER2-positive breast cancer
+Phesgo:HER2-positive breast cancer
+Rozlytrek:ROS1-positive NSCLC, NTRK tumors
+Tecentriq:Various cancers
+Zelboraf:BRAF-positive melanoma
+Accutane:Severe acne
+Madopar:Parkinson’s disease
+Ocrevus:Multiple sclerosis
+Susvimo:Wet AMD
+Vabysmo:Wet AMD, diabetic macular edema
+Pulmozyme:Cystic fibrosis
+Rocephin:Bacterial infections
+Tamiflu:Influenza
+Xofluza:Influenza
