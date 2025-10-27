@@ -1,6 +1,8 @@
 Simulation of the workshop *Mathe Macht Medikamente*
 ===
-Roche's Zukunftstag 2025
+Jitao David Zhang, Rigani Jegatheeswaran, and David Weber
+
+Ein Workshop für [Roche's Zukunftstag 2025](https://www.roche-registration.ch/zukunftstag-2025), in Zusammenarbeit mit dem Verein *WissensZukunft*.
 
 ## Setup the dependencies
 
