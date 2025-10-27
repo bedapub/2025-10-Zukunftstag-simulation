@@ -20,8 +20,10 @@ Install and initialize the local Python version.
 pyenv install 3.11.0
 pyenv local 3.11.0
 poetry init
-poetry add numpy pandas matplotlib itables
-poetry add -D jupyter jupyterlab
+### To add dependencies
+# poetry add numpy pandas matplotlib itables
+# poetry add -D jupyter jupyterlab
+## The project has been setup so that it can run out of the box
 poetry install --no-root
 ```
 
