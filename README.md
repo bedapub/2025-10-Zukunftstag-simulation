@@ -34,7 +34,7 @@ Once this is done, you will have a local installation of the Python version 3.11
 One could use conda as well
 
 ```
-conda create -n zukunfstag2025 -c conda-forge numpy pandas matplotlib itables jupyter jupyterlab seaborn mplcursors pyqt5 ## the package list is NOT updated, you may have to adjust it
+conda create -n zukunftstag2025 -c conda-forge numpy pandas matplotlib itables jupyter jupyterlab seaborn mplcursors ipympl ## the package list is NOT updated, you may have to adjust it
 conda activate zukunftstag2025
 ```
 
