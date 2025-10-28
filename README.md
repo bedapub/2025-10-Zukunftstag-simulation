@@ -38,7 +38,7 @@ conda create -n zukunftstag2025 -c conda-forge numpy pandas matplotlib itables j
 conda activate zukunftstag2025
 ```
 
-When I set up my environment, I used the combination of `pyenv` and `poetry`.
+When I set up my environment on my personal computer, I used the combination of `pyenv` and `poetry`. When I setup the environment on in my virtual box, I used the conda environment, because poetry failed due to SSL certificate issues (into which I wish to look deeper later). Both methods seem to work.
 
 ## Run the script
 
