@@ -50,3 +50,7 @@ raw_feature_bc_matrix
 arv/
 None-requirements.txt
 pseudobulk
+
+# Environment files
+.venv
+.venv/
