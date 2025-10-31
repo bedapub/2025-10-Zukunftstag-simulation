@@ -34,9 +34,9 @@ python -m streamlit run app.py --server.port 8504
 ### 4. Development Mode Features
 
 **Current configuration (DEV_MODE = True):**
-- ✅ **test_session**: Pre-populated with 29 teams
-- ✅ **morning_session**: Empty - register teams via dropdown (no QR code)
-- ✅ **afternoon_session**: Empty - register teams via dropdown (no QR code)
+- **test_session**: Pre-populated with 29 teams
+- **morning_session**: Empty - register teams via dropdown (no QR code)
+- **afternoon_session**: Empty - register teams via dropdown (no QR code)
 
 **Admin Dashboard**: http://localhost:8504 → Enter password: `admin123`
 
@@ -44,11 +44,11 @@ python -m streamlit run app.py --server.port 8504
 
 ### 5. Session Structure
 
-| Session | Purpose | Teams | QR Required (Dev) |
-|---------|---------|-------|-------------------|
-| `test_session` | Testing with pre-populated data | 29 teams ✅ | No ❌ |
-| `morning_session` | Live morning workshop | Empty (for live teams) | No ❌ |
-| `afternoon_session` | Live afternoon workshop | Empty (for live teams) | No ❌ |
+| Session | Purpose |
+|---------|---------|
+| `test_session` | Testing with pre-populated data |
+| `morning_session` | Live morning workshop |
+| `afternoon_session` | Live afternoon workshop |
 
 **In development (DEV_MODE=True):**
 - Teams select from dropdown (no QR code scanning needed)
