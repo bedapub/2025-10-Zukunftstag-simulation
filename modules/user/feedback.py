@@ -137,7 +137,20 @@ def show_feedback_form(db: ZukunftstagDatabase, team_name: str, parent_name: str
             success = db.save_feedback(team_name, overall_rating, favorite_game, all_comments)
             
             if success:
-                show_success_message("Vielen Dank für euer Feedback!")
+                show_success_message(f"Vielen Dank für euer Feedback, {parent_name} und {child_name}!")
+                st.markdown(f"""
+                <div style="text-align: center; padding: 20px; margin: 20px 0;">
+                    <h2 style="color: #0b41cd;">🎉 Herzlichen Glückwunsch! 🎉</h2>
+                    <h3>Ihr habt alle Spiele abgeschlossen!</h3>
+                    <p style="font-size: 18px; margin-top: 20px;">
+                        Vielen Dank <strong>{parent_name}</strong> und <strong>{child_name}</strong> für eure Teilnahme am 
+                        <strong>Mathe Macht Medikamente</strong> Workshop!
+                    </p>
+                    <p style="font-size: 16px; color: #666; margin-top: 15px;">
+                        Wir hoffen, ihr hattet viel Spaß und habt viel über Mathematik in der Medizin gelernt! 🧬📊
+                    </p>
+                </div>
+                """, unsafe_allow_html=True)
                 st.balloons()
                 st.rerun()
             else:
@@ -146,5 +159,22 @@ def show_feedback_form(db: ZukunftstagDatabase, team_name: str, parent_name: str
 def show_existing_feedback(db: ZukunftstagDatabase, team_name: str):
     """Show completion message for teams that have already submitted feedback."""
     
-    st.success("Vielen Dank für eure Teilnahme und euer Feedback!")
-    st.info("Wir hoffen, der Workshop hat euch gefallen!")
+    parent_name = st.session_state.get('parent_name', '')
+    child_name = st.session_state.get('child_name', '')
+    
+    st.markdown(f"""
+    <div style="text-align: center; padding: 20px; margin: 20px 0;">
+        <h2 style="color: #0b41cd;">🎉 Herzlichen Glückwunsch! 🎉</h2>
+        <h3>Ihr habt bereits alle Spiele abgeschlossen!</h3>
+        <p style="font-size: 18px; margin-top: 20px;">
+            Vielen Dank <strong>{parent_name}</strong> und <strong>{child_name}</strong> für eure Teilnahme am 
+            <strong>Mathe Macht Medikamente</strong> Workshop!
+        </p>
+        <p style="font-size: 16px; color: #666; margin-top: 15px;">
+            Wir hoffen, der Workshop hat euch gefallen! 🧬📊
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.success("Euer Feedback wurde bereits gespeichert!")
+    st.info("Ihr könnt nun die verschiedenen Spiele noch einmal in der Navigation erkunden.")

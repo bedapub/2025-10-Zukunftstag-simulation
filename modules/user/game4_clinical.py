@@ -123,7 +123,6 @@ def show_clinical_trial_simulation(db: ZukunftstagDatabase, team_name: str, pare
             
             if success:
                 show_success_message("Klinische Studiendaten erfolgreich gespeichert!")
-                st.balloons()
                 st.rerun()
             else:
                 show_error_message("Speichern der klinischen Studiendaten fehlgeschlagen. Bitte erneut versuchen.")

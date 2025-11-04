@@ -75,7 +75,6 @@ def show_game1_page(db: ZukunftstagDatabase):
                 
                 if success:
                     show_success_message("Größen erfolgreich gespeichert!")
-                    st.balloons()
                     
                     # Show immediate results
                     st.rerun()

@@ -80,7 +80,6 @@ def show_game2_page(db: ZukunftstagDatabase):
                     # Show immediate feedback
                     show_team_results(parent_name, parent_estimate, child_name, child_estimate)
                     
-                    st.balloons()
                     st.rerun()
                 else:
                     show_error_message("Speichern der Schätzungen fehlgeschlagen. Bitte erneut versuchen.")
