@@ -38,7 +38,7 @@ python -m streamlit run app.py --server.port 8504
 - **morning_session**: Empty - register teams via dropdown (no QR code)
 - **afternoon_session**: Empty - register teams via dropdown (no QR code)
 
-**Admin Dashboard**: http://localhost:8504 → Enter password: `admin123`
+**Admin Dashboard**: http://localhost:8501 → Enter password
 
 **Switch Sessions**: Admin Dashboard → Session Management → Select session
 

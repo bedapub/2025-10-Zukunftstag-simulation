@@ -9,7 +9,6 @@ from modules.user.game4_clinical import show_game4_page
 from modules.user.feedback import show_feedback_page
 from modules.admin.admin_dashboard import show_admin_page
 
-# Configure Streamlit page
 st.set_page_config(
     page_title="Mathe Macht Medikamente - Zukunftstag",
     page_icon="🧬",
@@ -17,10 +16,8 @@ st.set_page_config(
     initial_sidebar_state="collapsed"
 )
 
-# Custom CSS for mobile-first responsive design
 st.markdown("""
 <style>
-    /* Mobile-first responsive design */
     .main .block-container {
         max-width: 100%;
         padding-left: 1rem;
@@ -28,7 +25,6 @@ st.markdown("""
         padding-top: 2rem;
     }
     
-    /* Large, touch-friendly buttons */
     .stButton > button {
         width: 100%;
         height: 3.5rem;
@@ -37,7 +33,6 @@ st.markdown("""
         border-radius: 0.5rem;
     }
     
-    /* Larger input fields for mobile */
     .stTextInput > div > div > input {
         font-size: 1.1rem;
         height: 3rem;
@@ -54,7 +49,6 @@ st.markdown("""
         font-size: 1.1rem;
     }
     
-    /* Better spacing for mobile */
     h1 {
         font-size: 2rem !important;
         margin-bottom: 1rem !important;

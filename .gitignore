@@ -54,3 +54,10 @@ pseudobulk
 # Environment files
 .venv
 .venv/
+
+# Streamlit secrets (contains passwords)
+.streamlit/secrets.toml
+
+# Generated QR codes (regenerate for each deployment)
+qr_codes/*.png
+!qr_codes/.gitkeep

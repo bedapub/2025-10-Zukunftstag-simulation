@@ -44,12 +44,6 @@ def initialize_sessions():
             print(f"  ℹ️  {session_name} already exists")
     
     print("\n✅ Session initialization complete!")
-    print("\n📋 Available Sessions:")
-    print("   - morning_session: For live morning workshop")
-    print("   - afternoon_session: For live afternoon workshop")
-    print("   - test_session: For development and testing (pre-populated with 29 teams)")
-    print("\n💡 Use admin dashboard to switch between sessions")
-    print("🔑 Admin password: admin123\n")
 
 if __name__ == "__main__":
     initialize_sessions()
