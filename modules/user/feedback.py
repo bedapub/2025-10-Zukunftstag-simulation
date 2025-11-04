@@ -159,6 +159,8 @@ def show_feedback_form(db: ZukunftstagDatabase, team_name: str, parent_name: str
 def show_existing_feedback(db: ZukunftstagDatabase, team_name: str):
     """Show completion message for teams that have already submitted feedback."""
     
+    st.success("Vielen Dank für euer Feedback!")
+    
     parent_name = st.session_state.get('parent_name', '')
     child_name = st.session_state.get('child_name', '')
     
@@ -175,6 +177,3 @@ def show_existing_feedback(db: ZukunftstagDatabase, team_name: str):
         </p>
     </div>
     """, unsafe_allow_html=True)
-    
-    st.success("Euer Feedback wurde bereits gespeichert!")
-    st.info("Ihr könnt nun die verschiedenen Spiele noch einmal in der Navigation erkunden.")
