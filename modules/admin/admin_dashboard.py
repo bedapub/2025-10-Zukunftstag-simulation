@@ -319,14 +319,12 @@ def show_session_management_tab(db: ZukunftstagDatabase):
     
     # Prominent current session indicator
     st.markdown(f"""
-    <div style="background-color: #0b41cd; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
-        <h3 style="margin: 0; color: white;">Current Active Session: {current_session}</h3>
-        <p style="margin: 5px 0 0 0; color: #fff; opacity: 0.9;">All new data will be saved to this session</p>
+    <div style="padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
+        <h3 style="margin: 0;color: green">Current Active Session: {current_session}</h3>
     </div>
     """, unsafe_allow_html=True)
     
     if len(sessions_df) > 0:
-        st.markdown("#### All Sessions")
         # Add visual indicator for active session
         sessions_display = sessions_df.copy()
         sessions_display['Status'] = sessions_display['is_active'].apply(lambda x: '🟢 ACTIVE' if x else '⚪ Inactive')
