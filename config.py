@@ -4,15 +4,12 @@ Configuration constants for the Zukunftstag simulation application.
 
 import os
 
-# Development mode (set to False for production)
-DEV_MODE = True
+DEV_MODE = False
+DEV_BYPASS_QR = False
+DEV_AUTO_LOGIN_TEAM = None
+DEV_GENERATE_TEST_DATA = False
 
-# Development/Test settings
-DEV_BYPASS_QR = True  # Allow registration without QR code in dev mode
-DEV_AUTO_LOGIN_TEAM = "Herceptin"  # Auto-select this team in dev mode (set to None to disable)
-DEV_GENERATE_TEST_DATA = True  # Auto-generate test data on startup
-
-# Admin authentication - Use environment variable in production
+# Admin authentication for dev
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "admin123")
 
 # Session types
