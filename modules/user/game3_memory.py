@@ -167,16 +167,6 @@ def show_game_progress(current_round: int, total_rounds: int):
     progress = current_round / total_rounds
     st.progress(progress)
     st.caption(f"Round {current_round} of {total_rounds}")
-    
-    # Show answers so far
-    if st.session_state.memory_game_answers:
-        with st.expander("📊 Your Progress So Far"):
-            correct_count = sum(1 for ans in st.session_state.memory_game_answers.values() if ans['is_correct'])
-            st.metric("Correct Answers", f"{correct_count}/{len(st.session_state.memory_game_answers)}")
-            
-            for round_num, ans_data in st.session_state.memory_game_answers.items():
-                status = "✅" if ans_data['is_correct'] else "❌"
-                st.write(f"Round {round_num}: {status} You answered {ans_data['answer']}, correct was {ans_data['correct']}")
 
 def show_game_complete(db: ZukunftstagDatabase, team_name: str):
     """Show completion message and final results."""
