@@ -119,15 +119,15 @@ def handle_qr_code_landing():
     # Check if this is a QR code scan with team name embedded
     team_param = safe_get_query_param('team')
     
-    if team_param:
+    if team_param and not st.session_state.get('qr_processed', False):
         # QR code contains team name - store it in session state
         st.session_state.qr_team_name = team_param
         st.session_state.from_qr_code = True
         st.session_state.current_page = 'tech_check'
+        st.session_state.qr_processed = True  # Mark as processed to avoid repeating balloons
         
-        # Show welcome message for this specific team
+        # Show welcome message for this specific team (only once)
         st.balloons()
-        st.success(f"Willkommen **{team_param}**! Bitte registriert euer Team unten.")
 
 def show_main_app(db: ZukunftstagDatabase):
     """Show the main application interface."""

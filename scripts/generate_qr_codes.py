@@ -12,7 +12,7 @@ def generate_qr_codes():
     qr_dir.mkdir(exist_ok=True)
     
     # Base URL - replace with your deployed app URL
-    base_url = "http://localhost:8501"
+    base_url = "https://workshop-roche-zukunftstag.streamlit.app/"
     
     print("Generiere QR-Codes für Workshop-Tische...\n")
     

@@ -13,16 +13,16 @@ pip install -r requirements.txt
 
 ### 2. Initialize Database
 ```bash
-# Create three sessions (morning, afternoon, test)
-python scripts/initialize_sessions.py
+# Sessions are created automatically on first app start
+# No manual initialization needed!
 
-# Generate test data (populates test_session with 29 teams)
+# Optional: Generate test data (populates test_session with 29 teams)
 python scripts/generate_test_data.py
 
-# Check which session is currently active
+# Optional: Check which session is currently active
 python scripts/check_session.py
 
-# Create a QR Code
+# Optional: Create QR Codes for production deployment
 python scripts/generate_qr_codes.py
 ```
 
@@ -34,9 +34,12 @@ python -m streamlit run app.py --server.port 8504
 ### 4. Development Mode Features
 
 **Current configuration (DEV_MODE = True):**
-- **test_session**: Pre-populated with 29 teams
-- **morning_session**: Empty - register teams via dropdown (no QR code)
-- **afternoon_session**: Empty - register teams via dropdown (no QR code)
+- **Three sessions created automatically** on first start:
+  - `test_session` - Active by default, can be populated with test data
+  - `morning_session` - Empty, for live morning workshop
+  - `afternoon_session` - Empty, for live afternoon workshop
+- Teams select from dropdown (no QR code scanning needed)
+- Switch sessions in Admin Dashboard → Session Management
 
 **Admin Dashboard**: http://localhost:8501 → Enter password
 

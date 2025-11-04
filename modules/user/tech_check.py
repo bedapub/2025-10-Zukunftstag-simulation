@@ -68,7 +68,6 @@ def show_tech_check_page(db: ZukunftstagDatabase):
         parent_name = st.text_input(
             "Name Elternteil:",
             value=default_parent,
-            placeholder="Vorname eingeben",
             help="Vorname des Elternteils"
         )
         
@@ -77,7 +76,6 @@ def show_tech_check_page(db: ZukunftstagDatabase):
         child_name = st.text_input(
             "Name Kind:",
             value=default_child,
-            placeholder="Vorname eingeben", 
             help="Vorname des Kindes"
         )
         
@@ -107,7 +105,6 @@ def show_tech_check_page(db: ZukunftstagDatabase):
                     st.session_state.current_page = 'game1'
                     
                     show_success_message(f"Willkommen {parent_name} und {child_name}!")
-                    st.balloons()
                     
                     # Auto-advance to next page
                     st.rerun()

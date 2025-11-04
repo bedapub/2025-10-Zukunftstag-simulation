@@ -145,6 +145,22 @@ class ZukunftstagDatabase:
         conn.commit()
         conn.close()
     
+    def _initialize_default_sessions(self, cursor, conn):
+        """Initialize the three default workshop sessions."""
+        sessions = [
+            ("morning_session", "Morning Session (09:00 - 11:30)", False),
+            ("afternoon_session", "Afternoon Session (13:30 - 16:00)", False),
+            ("test_session", "Test Session (Development)", True)
+        ]
+        
+        for session_id, session_name, is_active in sessions:
+            cursor.execute('''
+                INSERT OR IGNORE INTO sessions (session_id, session_name, is_active)
+                VALUES (?, ?, ?)
+            ''', (session_id, session_name, is_active))
+        
+        conn.commit()
+    
     def load_simulation_data(self):
         """Load and prepare simulation data from files."""
         try:
@@ -228,13 +244,10 @@ class ZukunftstagDatabase:
         if result:
             session_id = result[0]
         else:
-            # Create default test session for development
+            # Create all sessions if none exist
+            self._initialize_default_sessions(cursor, conn)
+            # Default to test session
             session_id = "test_session"
-            cursor.execute('''
-                INSERT INTO sessions (session_id, session_name, is_active)
-                VALUES (?, ?, TRUE)
-            ''', (session_id, "Test Session"))
-            conn.commit()
         
         conn.close()
         

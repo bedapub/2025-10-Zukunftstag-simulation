@@ -17,6 +17,17 @@ The app uses **three separate sessions** to organize workshop data:
 2. **Afternoon Session** (`afternoon_session`) - For live afternoon workshop (13:30 - 16:00)  
 3. **Test Session** (`test_session`) - For development and testing (pre-populated with 29 teams)
 
+**All three sessions are created automatically** when the app first starts. The test session is active by default.
+
+### Switch Active Session (Admin Dashboard)
+
+In production, you'll need to switch the active session:
+
+1. Go to **Admin Dashboard** → **Session Management**
+2. Before morning workshop: Select **Morning Session** → Click "Activate"
+3. Before afternoon workshop: Select **Afternoon Session** → Click "Activate"
+4. Each session maintains separate team data
+
 ## Production Deployment
 
 ### Switch to Production Mode
@@ -40,14 +51,25 @@ DEV_GENERATE_TEST_DATA = False # No test data generation
 - ✅ Teams MUST scan QR codes on tables
 - ✅ Each QR code pre-fills the team name
 - ✅ Morning and afternoon sessions are separate
+- ✅ Switch active session via Admin Dashboard before each workshop
 
 ### Prepare Sessions
 
-```bash
-# Sessions already exist (from development)
-# Optionally clear morning/afternoon sessions if they have test data
-# Use Admin Dashboard → Session Management → Clear Session Data
-```
+**Sessions are created automatically** on first app start with these defaults:
+- Test Session: Active (for testing)
+- Morning Session: Inactive (activate before morning workshop)
+- Afternoon Session: Inactive (activate before afternoon workshop)
+
+**To switch sessions:**
+1. Log into Admin Dashboard
+2. Go to "Session Management" tab
+3. Select the session you want to activate
+4. Click "Activate Session"
+
+**Optional - Clear test data from production sessions:**
+- Use Admin Dashboard → Session Management → Clear Session Data
+- Only clear morning/afternoon sessions if they have test data
+- Keep test session for future testing
 
 ### Update QR Code URLs
 
