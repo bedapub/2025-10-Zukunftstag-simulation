@@ -159,15 +159,34 @@ font = "sans serif"
 
 ### Current Setup: SQLite (Local File)
 - **Database**: `zukunftstag.db` (SQLite file stored locally)
-- **Perfect for**: Single-day workshops, testing, development
-- **Limitation on Streamlit Cloud**: Data is lost when app redeploys
+- **Perfect for**: Workshops with continuous activity (3-4 hours each)
+- **⚠️ Streamlit Cloud Behavior**: 
+  - Database file persists **during active app session**
+  - As long as users are actively using the app, data is safe
+  - Data persists across page reloads and navigation
+  - **Data MAY BE LOST** when:
+    - App is redeployed (manual redeploy in Streamlit Cloud)
+    - App container is restarted by Streamlit Cloud infrastructure (rare during active use)
+    - App is idle for extended period and container is stopped
 
 ### For Streamlit Cloud Deployment:
-**Option 1: SQLite (Current - Recommended for workshops)**
+**Option 1: SQLite (Current - GOOD for 3-4 hour workshops)**
 - ✅ No additional setup needed
-- ✅ Data persists during workshop day
-- ⚠️ Data lost on app restart/redeploy
-- **Best for**: Single-day events where you export data at end of day
+- ✅ Data persists during active workshop (3-4 hours is fine!)
+- ✅ Handles multiple users simultaneously
+- ✅ Data safe as long as app has continuous user activity
+- ⚠️ Data lost on manual redeploy or infrastructure restart
+- **Best for**: Single morning or afternoon workshop session (3-4 hours each)
+- **Workshop Strategy**: 
+  - Morning session (09:00-11:30): Data persists throughout - safe! ✅
+  - **During presentation breaks**: Keep Admin Dashboard open in a browser tab to maintain app activity
+  - Export morning data before switching to afternoon session (optional backup)
+  - Afternoon session (13:30-16:00): Fresh session, data persists throughout - safe! ✅
+  - Export afternoon data at end of day
+- **IMPORTANT for Presentations**: 
+  - Keep the Admin Dashboard open in at least one browser tab during presentations
+  - This prevents Streamlit from considering the app "idle"
+  - Even with no user interaction, an open tab keeps the session alive
 
 **Option 2: PostgreSQL (For production)**
 - Use external database like Supabase, Neon, or ElephantSQL

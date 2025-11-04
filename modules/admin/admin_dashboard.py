@@ -27,6 +27,15 @@ def show_admin_page(db: ZukunftstagDatabase):
     
     # Admin is authenticated
     st.title("Admin Dashboard")
+    
+    # Warning banner for Streamlit Cloud
+    if not config.DEV_MODE:
+        st.warning("""
+        ⚠️ **IMPORTANT - Streamlit Cloud Data Persistence**: 
+        SQLite data may be lost when the app restarts. **Export data regularly!** 
+        Use the "Download Session Data" buttons below to backup your data.
+        """)
+    
     logout_admin()
     
     # Admin navigation tabs
@@ -308,11 +317,57 @@ def show_session_management_tab(db: ZukunftstagDatabase):
     sessions_df = pd.read_sql("SELECT * FROM sessions ORDER BY session_id", conn)
     conn.close()
     
-    st.info(f"**Current Active Session:** {current_session}")
+    # Prominent current session indicator
+    st.markdown(f"""
+    <div style="background-color: #0b41cd; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
+        <h3 style="margin: 0; color: white;">🟢 Current Active Session: {current_session}</h3>
+        <p style="margin: 5px 0 0 0; color: #fff; opacity: 0.9;">All new data will be saved to this session</p>
+    </div>
+    """, unsafe_allow_html=True)
     
     if len(sessions_df) > 0:
-        st.markdown("#### Existing Sessions")
-        st.dataframe(sessions_df, use_container_width=True)
+        st.markdown("#### All Sessions")
+        # Add visual indicator for active session
+        sessions_display = sessions_df.copy()
+        sessions_display['Status'] = sessions_display['is_active'].apply(lambda x: '🟢 ACTIVE' if x else '⚪ Inactive')
+        st.dataframe(sessions_display, use_container_width=True)
+    
+    # Export data for each session
+    st.markdown("#### 💾 Export Session Data (Backup)")
+    st.info("⚠️ **IMPORTANT**: Export data regularly! Streamlit Cloud may lose data on restart.")
+    
+    export_session = st.selectbox(
+        "Select session to export:",
+        options=sessions_df['session_id'].tolist() if len(sessions_df) > 0 else [],
+        key="export_session_select"
+    )
+    
+    if st.button("📥 Download Session Data as CSV", type="primary"):
+        all_data = db.export_all_data(export_session)
+        
+        # Create a combined export with all tables
+        import io
+        buffer = io.StringIO()
+        
+        for table_name, df in all_data.items():
+            if len(df) > 0:
+                buffer.write(f"\n### {table_name.upper()} ###\n")
+                df.to_csv(buffer, index=False)
+                buffer.write("\n")
+        
+        csv_data = buffer.getvalue()
+        
+        st.download_button(
+            label=f"💾 Download {export_session} Data",
+            data=csv_data,
+            file_name=f"{export_session}_data_{datetime.now().strftime('%Y%m%d_%H%M%S')}.csv",
+            mime="text/csv",
+            key="download_csv"
+        )
+        
+        show_success_message(f"Data export ready for {export_session}!")
+    
+    st.markdown("---")
     
     col1, col2 = st.columns(2)
     

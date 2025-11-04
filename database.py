@@ -6,6 +6,7 @@ import sqlite3
 import pandas as pd
 import numpy as np
 import random
+import os
 from datetime import datetime
 from typing import Dict, List, Tuple, Optional
 import streamlit as st
@@ -18,9 +19,20 @@ class ZukunftstagDatabase:
     """Database helper class for the Zukunftstag simulation app."""
     
     def __init__(self, db_path: str = "zukunftstag.db"):
-        self.db_path = db_path
+        # Use absolute path to ensure consistency
+        self.db_path = os.path.abspath(db_path)
+        
+        # Check if database exists before initialization
+        db_exists = os.path.exists(self.db_path)
+        
         self.init_database()
         self.load_simulation_data()
+        
+        # Log database status for debugging
+        if not db_exists:
+            print(f"⚠️  Created new database at: {self.db_path}")
+        else:
+            print(f"✅ Using existing database at: {self.db_path}")
     
     def get_connection(self):
         """Get database connection."""
@@ -562,9 +574,10 @@ class ZukunftstagDatabase:
             cursor.execute(f"SELECT COUNT(*) FROM {game} WHERE team_name = ? AND session_id = ?", (team_name, session_id))
             progress[f'game{i}'] = cursor.fetchone()[0] > 0
         
-        # Check Game 3 (needs all 5 rounds completed)
+        # Check Game 3 (needs exactly 5 rounds completed)
         cursor.execute("SELECT COUNT(*) FROM game3_memory WHERE team_name = ? AND session_id = ?", (team_name, session_id))
-        progress['game3'] = cursor.fetchone()[0] >= 5  # All 5 rounds must be completed
+        game3_count = cursor.fetchone()[0]
+        progress['game3'] = game3_count == 5  # Must be exactly 5 rounds
         
         # Check feedback
         cursor.execute("SELECT COUNT(*) FROM feedback WHERE team_name = ? AND session_id = ?", (team_name, session_id))
