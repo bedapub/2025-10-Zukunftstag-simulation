@@ -319,7 +319,7 @@ def show_session_management_tab(db: ZukunftstagDatabase):
     
     # Prominent current session indicator
     st.markdown(f"""
-    <div style="padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
+    <div style="padding: 1px; border-radius: 1px; text-align: center; margin-bottom: 5px;">
         <h3 style="margin: 0;color: green">Current Active Session: {current_session}</h3>
     </div>
     """, unsafe_allow_html=True)

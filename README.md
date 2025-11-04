@@ -13,8 +13,6 @@ pip install -r requirements.txt
 
 ### 2. Initialize Database
 ```bash
-# Sessions are created automatically on first app start
-# No manual initialization needed!
 
 # Optional: Generate test data (populates test_session with 29 teams)
 python scripts/generate_test_data.py
