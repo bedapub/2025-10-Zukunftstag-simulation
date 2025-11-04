@@ -320,7 +320,7 @@ def show_session_management_tab(db: ZukunftstagDatabase):
     # Prominent current session indicator
     st.markdown(f"""
     <div style="background-color: #0b41cd; color: white; padding: 15px; border-radius: 10px; text-align: center; margin-bottom: 20px;">
-        <h3 style="margin: 0; color: white;">🟢 Current Active Session: {current_session}</h3>
+        <h3 style="margin: 0; color: white;">Current Active Session: {current_session}</h3>
         <p style="margin: 5px 0 0 0; color: #fff; opacity: 0.9;">All new data will be saved to this session</p>
     </div>
     """, unsafe_allow_html=True)
@@ -333,8 +333,7 @@ def show_session_management_tab(db: ZukunftstagDatabase):
         st.dataframe(sessions_display, use_container_width=True)
     
     # Export data for each session
-    st.markdown("#### 💾 Export Session Data (Backup)")
-    st.info("⚠️ **IMPORTANT**: Export data regularly! Streamlit Cloud may lose data on restart.")
+    st.markdown("#### Export Session Data (Backup)")
     
     export_session = st.selectbox(
         "Select session to export:",
@@ -342,7 +341,7 @@ def show_session_management_tab(db: ZukunftstagDatabase):
         key="export_session_select"
     )
     
-    if st.button("📥 Download Session Data as CSV", type="primary"):
+    if st.button("Download Session Data as CSV", type="secondary"):
         all_data = db.export_all_data(export_session)
         
         # Create a combined export with all tables
