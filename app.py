@@ -124,7 +124,7 @@ def handle_qr_code_landing():
         st.session_state.qr_team_name = team_param
         st.session_state.from_qr_code = True
         st.session_state.current_page = 'tech_check'
-        st.session_state.qr_processed = True  # Mark as processed to avoid repeating balloons
+        st.session_state.qr_processed = True
 
 def show_main_app(db: ZukunftstagDatabase):
     """Show the main application interface."""
