@@ -1,8 +1,13 @@
 import qrcode
 import os
+import sys
 from pathlib import Path
 from urllib.parse import quote
 from PIL import Image, ImageDraw, ImageFont
+
+# Add parent directory to path to import database
+sys.path.append(str(Path(__file__).parent.parent))
+from database import ZukunftstagDatabase
 
 def generate_qr_codes():
     """Generate team-specific QR codes for each table in the workshop."""
@@ -13,6 +18,9 @@ def generate_qr_codes():
     
     # Base URL - replace with your deployed app URL
     base_url = "https://workshop-roche-zukunftstag.streamlit.app/"
+    
+    # Initialize database to get clinical trial data
+    db = ZukunftstagDatabase()
     
     print("Generiere QR-Codes für Workshop-Tische...\n")
     
@@ -28,6 +36,9 @@ def generate_qr_codes():
         # Create team-specific URL
         team_url = f"{base_url}?team={quote(team_name)}"
         
+        # Get clinical trial data for this team
+        clinical_data = db.get_clinical_trial_data(team_name)
+        
         # Generate QR code
         qr = qrcode.QRCode(
             version=1,
@@ -42,13 +53,14 @@ def generate_qr_codes():
         qr_img = qr.make_image(fill_color="black", back_color="white")
         qr_size = qr_img.size[0]
         
-        # Layout dimensions - ensure enough space for all text
+        # Layout dimensions - ensure enough space for all text including pain scores
         margin = 60
         title_section = 140
         team_section = 140
+        pain_section = 280  # New section for pain scores
         
         total_width = qr_size + (2 * margin)
-        total_height = margin + title_section + qr_size + team_section + margin
+        total_height = margin + title_section + qr_size + team_section + pain_section + margin
         
         # Create image
         full_img = Image.new('RGB', (total_width, total_height), 'white')
@@ -60,11 +72,15 @@ def generate_qr_codes():
             subtitle_font = ImageFont.truetype("arial.ttf", 24)
             team_font = ImageFont.truetype("arialbd.ttf", 42)
             info_font = ImageFont.truetype("arial.ttf", 22)
+            pain_title_font = ImageFont.truetype("arialbd.ttf", 26)
+            pain_font = ImageFont.truetype("arial.ttf", 20)
         except:
             title_font = ImageFont.load_default()
             subtitle_font = ImageFont.load_default()
             team_font = ImageFont.load_default()
             info_font = ImageFont.load_default()
+            pain_title_font = ImageFont.load_default()
+            pain_font = ImageFont.load_default()
         
         y_pos = margin
         
@@ -119,6 +135,46 @@ def generate_qr_codes():
             indication_bbox = draw.textbbox((0, 0), indication, font=info_font)
             indication_width = indication_bbox[2] - indication_bbox[0]
             draw.text(((total_width - indication_width) // 2, y_pos), indication, fill='#0055AA', font=info_font)
+        
+        y_pos += 40
+        
+        # Game 4: Pain scores section
+        if clinical_data:
+            # Draw separator line
+            draw.line([(margin, y_pos), (total_width - margin, y_pos)], fill='#CCCCCC', width=2)
+            y_pos += 20
+            
+            # Section title
+            pain_section_title = "SPIEL 4: SCHMERZGRAD"
+            pain_section_bbox = draw.textbbox((0, 0), pain_section_title, font=pain_title_font)
+            pain_section_width = pain_section_bbox[2] - pain_section_bbox[0]
+            draw.text(((total_width - pain_section_width) // 2, y_pos), pain_section_title, fill='#CC0000', font=pain_title_font)
+            y_pos += 40
+            
+            # Parent scores
+            parent_text = f"ELTERN:"
+            draw.text((margin + 20, y_pos), parent_text, fill='#000000', font=pain_title_font)
+            y_pos += 35
+            
+            vor_text = f"  Vor der Behandlung: {clinical_data['parent_before']}"
+            draw.text((margin + 40, y_pos), vor_text, fill='#333333', font=pain_font)
+            y_pos += 30
+            
+            nach_text = f"  Nach der Behandlung: {clinical_data['parent_after']}"
+            draw.text((margin + 40, y_pos), nach_text, fill='#333333', font=pain_font)
+            y_pos += 40
+            
+            # Child scores
+            child_text = f"KIND:"
+            draw.text((margin + 20, y_pos), child_text, fill='#000000', font=pain_title_font)
+            y_pos += 35
+            
+            vor_text = f"  Vor der Behandlung: {clinical_data['child_before']}"
+            draw.text((margin + 40, y_pos), vor_text, fill='#333333', font=pain_font)
+            y_pos += 30
+            
+            nach_text = f"  Nach der Behandlung: {clinical_data['child_after']}"
+            draw.text((margin + 40, y_pos), nach_text, fill='#333333', font=pain_font)
         
         # Save
         safe_team_name = team_name.replace(' ', '_').replace('/', '_')

@@ -67,9 +67,9 @@ def show_game2_page(db: ZukunftstagDatabase):
             child_valid, child_error = validate_perimeter(child_estimate)
             
             if not parent_valid:
-                show_error_message(f"Elternteil Schätzung: {parent_error}")
+                show_error_message(f"{parent_name}s Schätzung: {parent_error}")
             elif not child_valid:
-                show_error_message(f"Kind Schätzung: {child_error}")
+                show_error_message(f"{child_name}s Schätzung: {child_error}")
             else:
                 # Save data
                 success = db.save_game2_data(team_name, parent_estimate, child_estimate)

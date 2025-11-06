@@ -48,14 +48,14 @@ def show_clinical_trial_simulation(db: ZukunftstagDatabase, team_name: str, pare
     col1, col2 = st.columns(2)
     
     with col1:
-        st.markdown(f"#### {parent_name}s Schokolade")
+        st.markdown(f"#### {parent_name}s Medikament")
         color = "Rot" if clinical_data['parent_treatment'] == "Placebo" else "Schwarz"
-        st.info(f"Du hast erhalten: {color}e Schokoladenkugel")
+        st.info(f"Du hast erhalten: {color}e Medikamentenkugel")
     
     with col2:
-        st.markdown(f"#### {child_name}s Schokolade") 
+        st.markdown(f"#### {child_name}s Medikament") 
         color = "Rot" if clinical_data['child_treatment'] == "Placebo" else "Schwarz"
-        st.info(f"Du hast erhalten: {color}e Schokoladenkugel")
+        st.info(f"Du hast erhalten: {color}e Medikamentenkugel")
     
     # Pain score entry form
     with st.form("clinical_trial_form"):
@@ -67,7 +67,7 @@ def show_clinical_trial_simulation(db: ZukunftstagDatabase, team_name: str, pare
             st.markdown(f"**{parent_name}s Werte:**")
             
             parent_before = st.number_input(
-                "Vor der Schokolade:",
+                "Vor dem Medikament:",
                 min_value=0,
                 max_value=10,
                 value=5,
@@ -77,7 +77,7 @@ def show_clinical_trial_simulation(db: ZukunftstagDatabase, team_name: str, pare
             )
             
             parent_after = st.number_input(
-                "Nach der Schokolade:",
+                "Nach dem Medikament:",
                 min_value=0,
                 max_value=10,
                 value=5,
@@ -90,7 +90,7 @@ def show_clinical_trial_simulation(db: ZukunftstagDatabase, team_name: str, pare
             st.markdown(f"**{child_name}s Werte:**")
             
             child_before = st.number_input(
-                "Vor der Schokolade:",
+                "Vor dem Medikament:",
                 min_value=0,
                 max_value=10,
                 value=5,
@@ -100,7 +100,7 @@ def show_clinical_trial_simulation(db: ZukunftstagDatabase, team_name: str, pare
             )
             
             child_after = st.number_input(
-                "Nach der Schokolade:",
+                "Nach dem Medikament:",
                 min_value=0,
                 max_value=10,
                 value=5,
