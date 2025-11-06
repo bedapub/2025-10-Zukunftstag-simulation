@@ -32,25 +32,15 @@ def show_game3_analysis(db):
         medal = medals[i] if i < 3 else "🏅"
         st.write(f"{medal} **{team['team_name']}**: {team['correct_answers']}/{team['total_rounds']} ({team['percentage']:.0f}%)")
     
-    # Round difficulty analysis
-    st.markdown("#### Round Difficulty Analysis")
-    round_stats = memory_data.groupby('round_number')['is_correct'].agg(['sum', 'count', 'mean']).reset_index()
-    round_stats.columns = ['round_number', 'correct_answers', 'total_teams', 'success_rate']
-    round_stats['success_rate'] *= 100
-    
-    for _, round_data in round_stats.iterrows():
-        difficulty = "Easy" if round_data['success_rate'] >= 70 else "Medium" if round_data['success_rate'] >= 40 else "Hard"
-        st.write(f"**Round {int(round_data['round_number'])}**: {round_data['success_rate']:.0f}% success ({difficulty})")
-    
     # Visualizations
     st.markdown("#### Visualizations")
-    viz_tab1, viz_tab2 = st.tabs(["Team Performance", "Round Difficulty"])
+    viz_tab1, viz_tab2 = st.tabs(["Team Performance", "Answer Distribution per Round"])
     
     with viz_tab1:
         _show_team_performance(team_scores)
     
     with viz_tab2:
-        _show_round_difficulty(round_stats)
+        _show_answer_distribution_per_round(memory_data)
     
     # Data table
     st.markdown("#### Data Table")
@@ -80,23 +70,71 @@ def _show_team_performance(team_scores):
     st.plotly_chart(fig, use_container_width=True)
 
 
-def _show_round_difficulty(round_stats):
-    """Show round difficulty visualization."""
-    colors = [config.COLOR_SUCCESS if rate >= 70 else config.COLOR_WARNING if rate >= 40 
-             else config.COLOR_ERROR for rate in round_stats['success_rate']]
+def _show_answer_distribution_per_round(memory_data):
+    """Show which teams chose which answers for each round."""
+    st.markdown("**Answer Distribution: Which teams chose A, B, C, D for each round**")
     
-    fig = go.Figure()
-    fig.add_trace(go.Bar(
-        x=[f"Round {int(r)}" for r in round_stats['round_number']],
-        y=round_stats['success_rate'],
-        marker_color=colors,
-        text=round_stats['success_rate'].apply(lambda x: f'{x:.0f}%'),
-        textposition='outside'
-    ))
-    fig.update_layout(
-        title="Round Difficulty Analysis",
-        xaxis_title="Round",
-        yaxis_title="Success Rate (%)",
-        height=400
-    )
-    st.plotly_chart(fig, use_container_width=True)
+    rounds = sorted(memory_data['round_number'].unique())
+    
+    for round_num in rounds:
+        round_data = memory_data[memory_data['round_number'] == round_num]
+        
+        st.markdown(f"##### Round {int(round_num)}")
+        
+        # Button to reveal correct answer
+        col1, col2 = st.columns([3, 1])
+        with col2:
+            show_answer = st.button("Answer", key=f"reveal_round_{int(round_num)}", 
+                                   type="secondary", use_container_width=True)
+        
+        # Count answers
+        answer_counts = round_data['team_answer'].value_counts().sort_index()
+        all_options = ['A', 'B', 'C', 'D']
+        
+        # Create bar chart
+        fig = go.Figure()
+        
+        # Get correct answer
+        correct_answer = round_data['correct_answer'].iloc[0] if len(round_data) > 0 else None
+        
+        # Use colors based on whether answer is revealed
+        if show_answer:
+            # Highlight correct answer in green when revealed
+            colors = [config.COLOR_SUCCESS if option == correct_answer else config.COLOR_LIGHT_BLUE 
+                     for option in all_options]
+        else:
+            # Use uniform colors when not revealed
+            colors = [config.COLOR_LIGHT_BLUE for _ in all_options]
+        
+        counts = [answer_counts.get(option, 0) for option in all_options]
+        
+        fig.add_trace(go.Bar(
+            x=all_options,
+            y=counts,
+            marker_color=colors,
+            text=counts,
+            textposition='outside',
+            showlegend=False
+        ))
+        
+        # Show correct answer in title if button clicked
+        chart_title = f"Correct Answer: {correct_answer}" if show_answer else "Answer Distribution"
+        
+        fig.update_layout(
+            xaxis_title="Answer Option",
+            yaxis_title="Number of Teams",
+            height=300,
+            title=chart_title
+        )
+        
+        st.plotly_chart(fig, use_container_width=True, key=f"answer_dist_round_{int(round_num)}")
+        
+        # Show which teams chose what
+        with st.expander(f"View team details for Round {int(round_num)}"):
+            for option in all_options:
+                teams_with_option = round_data[round_data['team_answer'] == option]['team_name'].tolist()
+                if teams_with_option:
+                    st.write(f"**{option}:** {', '.join(teams_with_option)}")
+                else:
+                    st.write(f"**{option}:** (keine Teams)")
+

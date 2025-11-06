@@ -48,11 +48,8 @@ def show_memory_round(db: ZukunftstagDatabase, team_name: str, questions: list, 
     current_question = questions[round_num - 1]
     
     st.markdown(f"### Runde {round_num} von {len(questions)}")
-    st.markdown(f"**Molekül:** {current_question['molecule']}")
-    st.info(f"**Wirkung:** {current_question['description']}")
-    
-    # Show molecule structure (placeholder)
-    show_molecule_placeholder(current_question['molecule'])
+    st.info("**Das Molekül wird auf der Präsentation gezeigt. Schaut auf den Bildschirm!**")
+    st.markdown("---")
     
     # Answer form
     with st.form(f"memory_round_{round_num}"):
@@ -101,66 +98,6 @@ def show_memory_round(db: ZukunftstagDatabase, team_name: str, questions: list, 
     
     # Show progress
     show_game_progress(round_num, len(questions))
-
-def show_molecule_placeholder(molecule_name: str):
-    """Show placeholder for molecule structure."""
-    
-    # In a real implementation, you would show actual molecular structures
-    # For now, we'll use a placeholder with educational information
-    
-    molecule_info = {
-        "Aspirin": {
-            "formula": "C₉H₈O₄",
-            "description": "Contains a benzene ring with acetyl and carboxyl groups",
-            "color": config.COLOR_RED_2
-        },
-        "Glutathione": {
-            "formula": "C₁₀H₁₇N₃O₆S",
-            "description": "Tripeptide with cysteine, glutamic acid, and glycine",
-            "color": config.COLOR_PRIMARY_BLUE
-        },
-        "Dopamine": {
-            "formula": "C₈H₁₁NO₂",
-            "description": "Catecholamine neurotransmitter with benzene ring",
-            "color": config.COLOR_BRIGHT_BLUE
-        },
-        "Baloxavir marboxil": {
-            "formula": "C₂₇H₂₃F₂N₃O₇S",
-            "description": "Complex antiviral with fluorinated aromatic rings",
-            "color": config.COLOR_ORANGE_3
-        },
-        "Risdiplam": {
-            "formula": "C₁₉H₂₄N₆O₂",
-            "description": "Pyrimidine-based SMN2 splicing modifier",
-            "color": config.COLOR_PEACH_1
-        }
-    }
-    
-    info = molecule_info.get(molecule_name, {
-        "formula": "Unknown",
-        "description": "Molecular structure",
-        "color": config.COLOR_PURPLE_2
-    })
-    
-    # Create a visual placeholder
-    st.markdown(f"""
-    <div style="
-        background: {config.COLOR_LIGHT_BLUE};
-        border: 3px solid {info['color']};
-        border-radius: 15px;
-        padding: 30px;
-        text-align: center;
-        margin: 20px 0;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    ">
-        <h2 style="color: {config.COLOR_GRAY_1}; margin-bottom: 10px;">🧪 {molecule_name}</h2>
-        <h3 style="color: {config.COLOR_GRAY_2}; margin-bottom: 15px;">Formula: {info['formula']}</h3>
-        <p style="color: {config.COLOR_GRAY_3}; font-size: 16px; font-style: italic;">{info['description']}</p>
-        <div style="margin-top: 20px; font-size: 14px; color: {config.COLOR_GRAY_4};">
-            💡 Study this structure carefully for 10 seconds!
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
 
 def show_game_progress(current_round: int, total_rounds: int):
     """Show progress through the game."""

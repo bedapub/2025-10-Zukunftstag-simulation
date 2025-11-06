@@ -4,23 +4,20 @@ Jitao David Zhang, Rigani Jegatheeswaran, and David Weber
 
 Ein Workshop für [Roche's Zukunftstag 2025](https://www.roche-registration.ch/zukunftstag-2025), in Zusammenarbeit mit dem Verein *WissensZukunft*.
 
-## Quick Start (Streamlit App)
+## How to start
 
 ### 1. Install Dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 2. Initialize Database
+### 2. Initialize Database for testing
 ```bash
-
-# Optional: Generate test data (populates test_session with 29 teams)
+)
 python scripts/generate_test_data.py
 
-# Optional: Check which session is currently active
 python scripts/check_session.py
 
-# Optional: Create QR Codes for production deployment
 python scripts/generate_qr_codes.py
 ```
 

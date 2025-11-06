@@ -70,18 +70,20 @@ def show_clinical_trial_simulation(db: ZukunftstagDatabase, team_name: str, pare
                 "Vor der Schokolade:",
                 min_value=0,
                 max_value=10,
-                value=clinical_data['parent_before'],
+                value=5,
                 step=1,
-                key="parent_before"
+                key="parent_before",
+                help="Bitte den Wert vom Papier eingeben"
             )
             
             parent_after = st.number_input(
                 "Nach der Schokolade:",
                 min_value=0,
                 max_value=10,
-                value=clinical_data['parent_after'],
+                value=5,
                 step=1,
-                key="parent_after"
+                key="parent_after",
+                help="Bitte den Wert vom Papier eingeben"
             )
         
         with col2:
@@ -91,18 +93,20 @@ def show_clinical_trial_simulation(db: ZukunftstagDatabase, team_name: str, pare
                 "Vor der Schokolade:",
                 min_value=0,
                 max_value=10,
-                value=clinical_data['child_before'],
+                value=5,
                 step=1,
-                key="child_before"
+                key="child_before",
+                help="Bitte den Wert vom Papier eingeben"
             )
             
             child_after = st.number_input(
                 "Nach der Schokolade:",
                 min_value=0,
                 max_value=10,
-                value=clinical_data['child_after'],
+                value=5,
                 step=1,
-                key="child_after"
+                key="child_after",
+                help="Bitte den Wert vom Papier eingeben"
             )
         
         submitted = st.form_submit_button("Klinische Studiendaten absenden", use_container_width=True)
