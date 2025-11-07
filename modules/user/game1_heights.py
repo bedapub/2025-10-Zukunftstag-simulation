@@ -46,7 +46,8 @@ def show_game1_page(db: ZukunftstagDatabase):
                 min_value=50,
                 max_value=250,
                 step=1,
-                help="Größe in Zentimetern eingeben (z.B. 175)"
+                value=170,
+                help="Größe in Zentimetern eingeben (z.B. 170)"
             )
         
         with col2:
@@ -55,7 +56,8 @@ def show_game1_page(db: ZukunftstagDatabase):
                 min_value=50,
                 max_value=200,
                 step=1,
-                help="Größe in Zentimetern eingeben (z.B. 142)"
+                value=150,
+                help="Größe in Zentimetern eingeben (z.B. 150)"
             )
         
         submitted = st.form_submit_button("Größen absenden", use_container_width=True)

@@ -13,7 +13,6 @@ pip install -r requirements.txt
 
 ### 2. Initialize Database for testing
 ```bash
-)
 python scripts/generate_test_data.py
 
 python scripts/check_session.py
