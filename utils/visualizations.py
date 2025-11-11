@@ -81,7 +81,7 @@ def create_height_histogram(df, height_col, title, color):
             y=[0] * len(df),
             mode='markers',
             marker=dict(color=dark_color, size=16, symbol='diamond'),
-            name='Messungen',
+            name='Messung',
             hovertemplate='%{text}<br>Größe: %{x} cm<extra></extra>',
             text=[f"{row['team_name']}<br>{row.get('parent_name', 'Parent') if 'parent' in height_col else row.get('child_name', 'Child')}" 
                   for _, row in df.iterrows()]
@@ -293,7 +293,7 @@ def create_clinical_trial_boxplot(df_melted):
             y=df_melted['pain_score'],
             mode='markers',
             marker=dict(color=config.COLOR_RED_2, size=10, line=dict(width=2, color='white')),
-            name='Messungen',
+            name='Messung',
             customdata=df_melted[['team_name', 'person', 'timepoint']],
             hovertemplate='%{customdata[0]}<br>%{customdata[1]}<br>%{customdata[2]}: %{y}<extra></extra>'
         )

@@ -1,6 +1,7 @@
 """Game 2 (Perimeter) visualization and analysis for admin dashboard."""
 
 import streamlit as st
+import pandas as pd
 import plotly.graph_objects as go
 import config
 from modules.admin.admin_helpers import display_winners, display_statistics, show_waiting_message
@@ -8,18 +9,29 @@ from modules.admin.admin_helpers import display_winners, display_statistics, sho
 
 def show_game2_analysis(db):
     """Display Game 2 (Perimeter) analysis."""
+    # Get teams that have completed tech check
+    teams_data = db.get_all_teams()
+    
+    if len(teams_data) == 0:
+        show_waiting_message("Game 2 (Perimeter)",
+                           "Teams will appear here after completing Tech Check. Results will update as teams submit their perimeter estimates.")
+        return
+    
+    # Get perimeter data (refresh from database)
     perimeter_data = db.get_game_data(2)
     
+    # Merge with team info for analysis
+    if len(perimeter_data) > 0:
+        perimeter_data = perimeter_data.merge(teams_data[['team_name', 'parent_name', 'child_name']], on='team_name', how='left')
+    
+    # Only show analysis if there's data
     if len(perimeter_data) == 0:
-        show_waiting_message("Game 2 (Perimeter)",
-                           "Results and winners will appear here automatically as teams submit their perimeter estimates.")
+        st.info("📊 Statistics and visualizations will appear once teams submit their perimeter estimates.")
+        # Show data table at the end even if no data yet
+        _show_editable_data_table(db, teams_data, perimeter_data)
         return
     
     st.success(f"**{len(perimeter_data)} teams** have completed Game 2 (Perimeter)")
-    
-    # Merge with team names
-    teams_data = db.get_all_teams()
-    perimeter_data = perimeter_data.merge(teams_data[['team_name', 'parent_name', 'child_name']], on='team_name')
     
     # Winners
     st.markdown("#### Perimeter Estimation Results")
@@ -62,11 +74,59 @@ def show_game2_analysis(db):
     with viz_tab3:
         _show_boxplot(perimeter_data)
     
-    # Data table
-    st.markdown("#### Data Table")
-    display_perimeter = perimeter_data[['team_name', 'parent_name', 'parent_estimate', 'parent_delta', 
-                                      'child_name', 'child_estimate', 'child_delta']]
-    st.dataframe(display_perimeter, width="stretch")
+    # Data table at the end
+    _show_editable_data_table(db, teams_data, perimeter_data)
+
+
+def _show_editable_data_table(db, teams_data, perimeter_data):
+    """Show editable data table at the end."""
+    st.markdown("---")
+    st.markdown("#### Data Table (Editable)")
+    
+    # Prepare data for editing - always refresh from database
+    edit_data = teams_data[['team_name', 'parent_name', 'child_name']].copy()
+    
+    # Add perimeter columns - merge fresh data from database
+    if len(perimeter_data) > 0:
+        edit_data = edit_data.merge(
+            perimeter_data[['team_name', 'parent_estimate', 'child_estimate']], 
+            on='team_name', 
+            how='left'
+        )
+    else:
+        edit_data['parent_estimate'] = None
+        edit_data['child_estimate'] = None
+    
+    # Make editable
+    edited_df = st.data_editor(
+        edit_data,
+        use_container_width=True,
+        num_rows="fixed",
+        column_config={
+            "team_name": st.column_config.TextColumn("Team Name", disabled=True),
+            "parent_name": st.column_config.TextColumn("Parent Name", disabled=True),
+            "child_name": st.column_config.TextColumn("Child Name", disabled=True),
+            "parent_estimate": st.column_config.NumberColumn("Parent Estimate (m)", min_value=0, max_value=100, format="%.1f"),
+            "child_estimate": st.column_config.NumberColumn("Child Estimate (m)", min_value=0, max_value=100, format="%.1f"),
+        },
+        hide_index=True,
+        key="game2_editor"
+    )
+    
+    # Save changes button
+    if st.button("💾 Save Changes", key="save_game2"):
+        changes_saved = False
+        for _, row in edited_df.iterrows():
+            if pd.notna(row['parent_estimate']) and pd.notna(row['child_estimate']):
+                success = db.save_game2_data(row['team_name'], float(row['parent_estimate']), float(row['child_estimate']))
+                if success:
+                    changes_saved = True
+        
+        if changes_saved:
+            st.success("✅ Changes saved successfully!")
+            st.rerun()
+        else:
+            st.warning("⚠️ No valid data to save.")
 
 
 def _show_histogram(perimeter_data):

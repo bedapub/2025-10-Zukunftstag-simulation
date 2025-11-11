@@ -31,7 +31,7 @@ def create_histogram_with_points(data, column, title, color, person_names_col=No
         y=[0] * len(data),
         mode='markers',
         marker=dict(color=color, size=10, symbol='diamond'),
-        name='Messungen',
+        name='Messung',
         hovertemplate='%{text}<br>Wert: %{x}<extra></extra>' if hover_text else None,
         text=hover_text
     ))

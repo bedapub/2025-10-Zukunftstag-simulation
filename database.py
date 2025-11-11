@@ -574,10 +574,10 @@ class ZukunftstagDatabase:
             cursor.execute(f"SELECT COUNT(*) FROM {game} WHERE team_name = ? AND session_id = ?", (team_name, session_id))
             progress[f'game{i}'] = cursor.fetchone()[0] > 0
         
-        # Check Game 3 (needs exactly 5 rounds completed)
+        # Check Game 3 (needs exactly 3 rounds completed)
         cursor.execute("SELECT COUNT(*) FROM game3_memory WHERE team_name = ? AND session_id = ?", (team_name, session_id))
         game3_count = cursor.fetchone()[0]
-        progress['game3'] = game3_count == 5  # Must be exactly 5 rounds
+        progress['game3'] = game3_count == 3  # Must be exactly 3 rounds
         
         # Check feedback
         cursor.execute("SELECT COUNT(*) FROM feedback WHERE team_name = ? AND session_id = ?", (team_name, session_id))

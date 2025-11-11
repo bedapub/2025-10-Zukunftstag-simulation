@@ -14,18 +14,29 @@ from modules.admin.admin_helpers import (
 
 def show_game1_analysis(db):
     """Display Game 1 (Heights) analysis."""
+    # Get teams that have completed tech check
+    teams_data = db.get_all_teams()
+    
+    if len(teams_data) == 0:
+        show_waiting_message("Game 1 (Heights)", 
+                           "Teams will appear here after completing Tech Check. Results will update as teams submit their height measurements.")
+        return
+    
+    # Get heights data (refresh from database)
     heights_data = db.get_game_data(1)
     
+    # Merge with team info for analysis
+    if len(heights_data) > 0:
+        heights_data = heights_data.merge(teams_data[['team_name', 'parent_name', 'child_name']], on='team_name', how='left')
+    
+    # Only show analysis if there's data
     if len(heights_data) == 0:
-        show_waiting_message("Game 1 (Heights)", 
-                           "Results will appear here automatically as teams submit their height measurements.")
+        st.info("📊 Statistics and visualizations will appear once teams submit their height measurements.")
+        # Show data table at the end even if no data yet
+        _show_editable_data_table(db, teams_data, heights_data)
         return
     
     st.success(f"**{len(heights_data)} teams** have completed Game 1 (Heights)")
-    
-    # Merge with team names
-    teams_data = db.get_all_teams()
-    heights_data = heights_data.merge(teams_data[['team_name', 'parent_name', 'child_name']], on='team_name')
     
     # Statistics
     st.markdown("#### Height Statistics")
@@ -57,10 +68,59 @@ def show_game1_analysis(db):
     with viz_tab3:
         _show_scatter_plot(heights_data)
     
-    # Data table
-    st.markdown("#### Data Table")
-    display_heights = heights_data[['team_name', 'parent_name', 'parent_height', 'child_name', 'child_height']]
-    st.dataframe(display_heights, width="stretch")
+    # Data table at the end
+    _show_editable_data_table(db, teams_data, heights_data)
+
+
+def _show_editable_data_table(db, teams_data, heights_data):
+    """Show editable data table at the end."""
+    st.markdown("---")
+    st.markdown("#### Data Table (Editable)")
+    
+    # Prepare data for editing - always refresh from database
+    edit_data = teams_data[['team_name', 'parent_name', 'child_name']].copy()
+    
+    # Add height columns - merge fresh data from database
+    if len(heights_data) > 0:
+        edit_data = edit_data.merge(
+            heights_data[['team_name', 'parent_height', 'child_height']], 
+            on='team_name', 
+            how='left'
+        )
+    else:
+        edit_data['parent_height'] = None
+        edit_data['child_height'] = None
+    
+    # Make editable
+    edited_df = st.data_editor(
+        edit_data,
+        use_container_width=True,
+        num_rows="fixed",
+        column_config={
+            "team_name": st.column_config.TextColumn("Team Name", disabled=True),
+            "parent_name": st.column_config.TextColumn("Parent Name", disabled=True),
+            "child_name": st.column_config.TextColumn("Child Name", disabled=True),
+            "parent_height": st.column_config.NumberColumn("Parent Height (cm)", min_value=100, max_value=250, format="%.1f"),
+            "child_height": st.column_config.NumberColumn("Child Height (cm)", min_value=50, max_value=200, format="%.1f"),
+        },
+        hide_index=True,
+        key="game1_editor"
+    )
+    
+    # Save changes button
+    if st.button("💾 Save Changes", key="save_game1"):
+        changes_saved = False
+        for _, row in edited_df.iterrows():
+            if pd.notna(row['parent_height']) and pd.notna(row['child_height']):
+                success = db.save_game1_data(row['team_name'], float(row['parent_height']), float(row['child_height']))
+                if success:
+                    changes_saved = True
+        
+        if changes_saved:
+            st.success("✅ Changes saved successfully!")
+            st.rerun()
+        else:
+            st.warning("⚠️ No valid data to save.")
 
 
 def _show_histograms(heights_data):

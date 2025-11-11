@@ -1,6 +1,7 @@
 """Game 3 (Memory) visualization and analysis for admin dashboard."""
 
 import streamlit as st
+import pandas as pd
 import plotly.graph_objects as go
 import config
 from modules.admin.admin_helpers import show_waiting_message
@@ -8,11 +9,22 @@ from modules.admin.admin_helpers import show_waiting_message
 
 def show_game3_analysis(db):
     """Display Game 3 (Memory) analysis."""
+    # Get teams that have completed tech check
+    teams_data = db.get_all_teams()
+    
+    if len(teams_data) == 0:
+        show_waiting_message("Game 3 (Memory)",
+                           "Teams will appear here after completing Tech Check. Rankings will update as teams complete memory rounds.")
+        return
+    
+    # Get memory data (refresh from database)
     memory_data = db.get_game_data(3)
     
+    # Only show analysis if there's data
     if len(memory_data) == 0:
-        show_waiting_message("Game 3 (Memory)",
-                           "Team rankings and round statistics will appear here automatically as teams complete memory rounds.")
+        st.info("📊 Statistics and visualizations will appear once teams complete memory rounds.")
+        # Show data table at the end even if no data yet
+        _show_editable_data_table(db, teams_data, memory_data)
         return
     
     st.success(f"**{len(memory_data.groupby('team_name'))} teams** have completed Game 3 (Memory)")
@@ -42,10 +54,79 @@ def show_game3_analysis(db):
     with viz_tab2:
         _show_answer_distribution_per_round(memory_data)
     
-    # Data table
-    st.markdown("#### Data Table")
-    display_memory = memory_data[['team_name', 'round_number', 'correct_answer', 'team_answer', 'is_correct']]
-    st.dataframe(display_memory, width="stretch")
+    # Data table at the end
+    _show_editable_data_table(db, teams_data, memory_data)
+
+
+def _show_editable_data_table(db, teams_data, memory_data):
+    """Show simplified editable data table at the end."""
+    st.markdown("---")
+    st.markdown("#### Data Table (Editable)")
+    
+    # Prepare simplified data for editing
+    edit_data = teams_data[['team_name', 'parent_name', 'child_name']].copy()
+    
+    # Add simple round answer columns
+    for round_num in range(1, 4):  # 3 rounds
+        edit_data[f'round_{round_num}'] = None
+    
+    # Fill in existing answers (only rounds 1-3)
+    if len(memory_data) > 0:
+        for _, row in memory_data.iterrows():
+            round_num = int(row["round_number"])
+            if round_num <= 3:  # Only process rounds 1-3
+                team_mask = edit_data['team_name'] == row['team_name']
+                round_col = f'round_{round_num}'
+                edit_data.loc[team_mask, round_col] = row['team_answer']
+    
+    # Configure columns
+    column_config = {
+        "team_name": st.column_config.TextColumn("Team Name", disabled=True),
+        "parent_name": st.column_config.TextColumn("Parent Name", disabled=True),
+        "child_name": st.column_config.TextColumn("Child Name", disabled=True),
+    }
+    
+    for round_num in range(1, 4):  # 3 rounds
+        column_config[f'round_{round_num}'] = st.column_config.SelectboxColumn(
+            f"Round {round_num}",
+            options=["A", "B", "C", "D"],
+            help=f"Round {round_num} answer"
+        )
+    
+    edited_df = st.data_editor(
+        edit_data,
+        use_container_width=True,
+        num_rows="fixed",
+        column_config=column_config,
+        hide_index=True,
+        key="game3_editor"
+    )
+    
+    # Save changes button
+    if st.button("💾 Save Changes", key="save_game3"):
+        from utils.helpers import get_molecule_questions
+        questions = get_molecule_questions()
+        
+        changes_saved = False
+        for _, row in edited_df.iterrows():
+            for round_num in range(1, 4):  # 3 rounds
+                answer_col = f'round_{round_num}'
+                if pd.notna(row[answer_col]):
+                    correct_answer = questions[round_num - 1]['correct']
+                    success = db.save_game3_data(
+                        row['team_name'],
+                        round_num,
+                        correct_answer,
+                        row[answer_col]
+                    )
+                    if success:
+                        changes_saved = True
+        
+        if changes_saved:
+            st.success("✅ Changes saved successfully!")
+            st.rerun()
+        else:
+            st.warning("⚠️ No valid data to save.")
 
 
 def _show_team_performance(team_scores):

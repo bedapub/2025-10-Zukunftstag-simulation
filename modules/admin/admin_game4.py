@@ -9,11 +9,22 @@ from modules.admin.admin_helpers import create_treatment_comparison_boxplot, nor
 
 def show_game4_analysis(db):
     """Display Game 4 (Clinical Trial) analysis."""
+    # Get teams that have completed tech check
+    teams_data = db.get_all_teams()
+    
+    if len(teams_data) == 0:
+        show_waiting_message("Game 4 (Clinical Trial)",
+                           "Teams will appear here after completing Tech Check. Analysis will update as teams complete the clinical trial simulation.")
+        return
+    
+    # Get clinical data (refresh from database)
     clinical_data = db.get_game_data(4)
     
+    # Only show analysis if there's data
     if len(clinical_data) == 0:
-        show_waiting_message("Game 4 (Clinical Trial)",
-                           "Treatment effects and statistical analysis will appear here automatically as teams complete the clinical trial simulation.")
+        st.info("📊 Statistics and visualizations will appear once teams complete the clinical trial simulation.")
+        # Show data table at the end even if no data yet
+        _show_editable_data_table(db, teams_data, clinical_data)
         return
     
     st.success(f"**{len(clinical_data)} teams** have completed Game 4 (Clinical Trial)")
@@ -55,10 +66,69 @@ def show_game4_analysis(db):
     with viz_tab2:
         _show_individual_changes(placebo_data, molekul_data)
     
-    # Data table
-    st.markdown("#### Data Table")
-    display_clinical = clinical_data[['team_name', 'parent_before', 'parent_after', 'child_before', 'child_after']]
-    st.dataframe(display_clinical, width="stretch")
+    # Data table at the end
+    _show_editable_data_table(db, teams_data, clinical_data)
+
+
+def _show_editable_data_table(db, teams_data, clinical_data):
+    """Show editable data table at the end."""
+    st.markdown("---")
+    st.markdown("#### Data Table (Editable)")
+    
+    # Prepare data for editing - always refresh from database
+    edit_data = teams_data[['team_name', 'parent_name', 'child_name']].copy()
+    
+    # Add clinical trial columns - merge fresh data from database
+    if len(clinical_data) > 0:
+        edit_data = edit_data.merge(
+            clinical_data[['team_name', 'parent_before', 'parent_after', 'child_before', 'child_after']], 
+            on='team_name', 
+            how='left'
+        )
+    else:
+        edit_data['parent_before'] = None
+        edit_data['parent_after'] = None
+        edit_data['child_before'] = None
+        edit_data['child_after'] = None
+    
+    # Make editable
+    edited_df = st.data_editor(
+        edit_data,
+        use_container_width=True,
+        num_rows="fixed",
+        column_config={
+            "team_name": st.column_config.TextColumn("Team Name", disabled=True),
+            "parent_name": st.column_config.TextColumn("Parent Name", disabled=True),
+            "child_name": st.column_config.TextColumn("Child Name", disabled=True),
+            "parent_before": st.column_config.NumberColumn("Parent Before", min_value=0, max_value=10, format="%d"),
+            "parent_after": st.column_config.NumberColumn("Parent After", min_value=0, max_value=10, format="%d"),
+            "child_before": st.column_config.NumberColumn("Child Before", min_value=0, max_value=10, format="%d"),
+            "child_after": st.column_config.NumberColumn("Child After", min_value=0, max_value=10, format="%d"),
+        },
+        hide_index=True,
+        key="game4_editor"
+    )
+    
+    # Save changes button
+    if st.button("💾 Save Changes", key="save_game4"):
+        changes_saved = False
+        for _, row in edited_df.iterrows():
+            if all(pd.notna(row[col]) for col in ['parent_before', 'parent_after', 'child_before', 'child_after']):
+                success = db.save_game4_data(
+                    row['team_name'],
+                    int(row['parent_before']),
+                    int(row['parent_after']),
+                    int(row['child_before']),
+                    int(row['child_after'])
+                )
+                if success:
+                    changes_saved = True
+        
+        if changes_saved:
+            st.success("✅ Changes saved successfully!")
+            st.rerun()
+        else:
+            st.warning("⚠️ No valid data to save.")
 
 
 def _prepare_clinical_data(clinical_data):
