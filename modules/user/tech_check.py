@@ -76,7 +76,7 @@ def show_tech_check_page(db: ZukunftstagDatabase):
     team_indication = db.max_team_names.get(qr_team_name, "Unknown Disease")
     
     st.success(f"**Team:** {qr_team_name}")
-    st.info(f"**Forschungsgebiet:** {team_indication}")
+    st.info(f"**Indikation:** {team_indication}")
     st.markdown("---")
     
     with st.form("tech_check_form"):
