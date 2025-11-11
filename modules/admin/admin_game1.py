@@ -46,7 +46,7 @@ def show_game1_analysis(db):
     
     # Visualizations
     st.markdown("#### Visualizations")
-    viz_tab1, viz_tab2, viz_tab3 = st.tabs(["Histograms", "Boxplot", "Scatter Plot"])
+    viz_tab1, viz_tab2, viz_tab3 = st.tabs(["Histogramme", "Boxplot", "Streudiagramm"])
     
     with viz_tab1:
         _show_histograms(heights_data)
@@ -93,10 +93,10 @@ def _show_boxplot(heights_data):
     
     fig = create_boxplot_comparison(
         heights_data['child_height'], heights_data['parent_height'],
-        'Children', 'Parents',
+        'Kinder', 'Eltern',
         config.COLOR_CHILD, config.COLOR_PARENT,
-        "Height Comparison - Boxplot with Individual Points",
-        "Height (cm)",
+        "Größenvergleich - Boxplot mit Einzelpunkten",
+        "Größe (cm)",
         custom_data_child, custom_data_parent
     )
     st.plotly_chart(fig, use_container_width=True)
@@ -108,7 +108,7 @@ def _show_scatter_plot(heights_data):
         heights_data,
         x='parent_height',
         y='child_height',
-        title="Parent vs Child Height Correlation",
+        title="Eltern vs Kind Größe Korrelation",
         hover_data=['team_name', 'parent_name', 'child_name']
     )
     
@@ -124,7 +124,7 @@ def _show_scatter_plot(heights_data):
                 x=heights_data['parent_height'],
                 y=p(heights_data['parent_height']),
                 mode='lines',
-                name=f'Correlation line (r={correlation:.2f})',
+                name=f'r={correlation:.2f}',
                 line=dict(color=config.COLOR_PRIMARY, width=3)
             ))
         except:
@@ -135,13 +135,15 @@ def _show_scatter_plot(heights_data):
     median_child = heights_data['child_height'].median()
     
     fig.add_hline(y=median_child, line_dash="dash", line_color="purple",
-                 annotation_text=f"Median child: {median_child:.1f} cm")
+                 annotation_text=f"Median Kind: {median_child:.1f} cm")
     fig.add_vline(x=median_parent, line_dash="dash", line_color="purple",
-                 annotation_text=f"Median parent: {median_parent:.1f} cm")
+                 annotation_text=f"Median Eltern: {median_parent:.1f} cm")
     
     fig.update_layout(
-        xaxis_title="Parent Height (cm)",
-        yaxis_title="Child Height (cm)",
+        xaxis_title="Eltern Größe (cm)",
+        yaxis_title="Kind Größe (cm)",
+        xaxis_title_font=dict(size=20, color='black', family='Arial'),
+        yaxis_title_font=dict(size=20, color='black', family='Arial'),
         height=500
     )
     st.plotly_chart(fig, use_container_width=True)

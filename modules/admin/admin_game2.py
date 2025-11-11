@@ -27,11 +27,11 @@ def show_game2_analysis(db):
     
     with col1:
         display_winners(perimeter_data, 'parent_abs_delta', 'parent_name', 'team_name', 
-                       title="🏆 Parent Winners (Top 3)")
+                       title="🏆 Eltern Gewinner (Top 3)")
     
     with col2:
         display_winners(perimeter_data, 'child_abs_delta', 'child_name', 'team_name',
-                       title="🏆 Child Winners (Top 3)")
+                       title="🏆 Kind Gewinner (Top 3)")
     
     # Statistics
     st.markdown("#### Statistics")
@@ -74,13 +74,13 @@ def _show_histogram(perimeter_data):
     fig = go.Figure()
     fig.add_trace(go.Histogram(
         x=perimeter_data['parent_estimate'],
-        name='Parent Estimates',
+        name='Eltern',
         marker_color=config.COLOR_PARENT,
         opacity=0.7
     ))
     fig.add_trace(go.Histogram(
         x=perimeter_data['child_estimate'],
-        name='Child Estimates',
+        name='Kinder',
         marker_color=config.COLOR_CHILD,
         opacity=0.7
     ))
@@ -91,9 +91,11 @@ def _show_histogram(perimeter_data):
                   annotation_text=f"Actual: {actual_perimeter}m", line_width=3)
     
     fig.update_layout(
-        title="Perimeter Estimates Distribution",
-        xaxis_title="Estimate (meters)",
-        yaxis_title="Frequency",
+        title="Umfangsschätzungen Verteilung",
+        xaxis_title="Schätzung (Meter)",
+        yaxis_title="Häufigkeit",
+        xaxis_title_font=dict(size=20, color='black', family='Arial'),
+        yaxis_title_font=dict(size=20, color='black', family='Arial'),
         barmode='overlay',
         height=400
     )
@@ -115,9 +117,11 @@ def _show_winners_chart(perimeter_data):
                          for i in range(len(parent_sorted))]
         ))
         fig.update_layout(
-            title="Parent Estimates (sorted by accuracy)",
-            xaxis_title="Difference from actual (m)",
+            title="Eltern Schätzungen (sortiert nach Genauigkeit)",
+            xaxis_title="Abweichung vom tatsächlichen Wert (m)",
             yaxis_title="Team",
+            xaxis_title_font=dict(size=20, color='black', family='Arial'),
+            yaxis_title_font=dict(size=20, color='black', family='Arial'),
             height=600
         )
         fig.add_vline(x=0, line_dash="solid", line_color="black")
@@ -134,9 +138,11 @@ def _show_winners_chart(perimeter_data):
                          for i in range(len(child_sorted))]
         ))
         fig.update_layout(
-            title="Child Estimates (sorted by accuracy)",
-            xaxis_title="Difference from actual (m)",
+            title="Kind Schätzungen (sortiert nach Genauigkeit)",
+            xaxis_title="Abweichung vom tatsächlichen Wert (m)",
             yaxis_title="Team",
+            xaxis_title_font=dict(size=20, color='black', family='Arial'),
+            yaxis_title_font=dict(size=20, color='black', family='Arial'),
             height=600
         )
         fig.add_vline(x=0, line_dash="solid", line_color="black")
@@ -149,14 +155,14 @@ def _show_boxplot(perimeter_data):
     
     fig.add_trace(go.Box(
         y=perimeter_data['child_estimate'],
-        name='Children',
+        name='Kinder',
         marker_color=config.COLOR_CHILD,
         boxmean=True
     ))
     
     fig.add_trace(go.Box(
         y=perimeter_data['parent_estimate'],
-        name='Parents',
+        name='Eltern',
         marker_color='darkblue',
         boxmean=True
     ))
@@ -165,8 +171,9 @@ def _show_boxplot(perimeter_data):
                 annotation_text="Actual: 28m", line_width=3)
     
     fig.update_layout(
-        title="Perimeter Estimates Comparison",
-        yaxis_title="Estimate (meters)",
+        title="Umfangsschätzungen Vergleich",
+        yaxis_title="Schätzung (Meter)",
+        yaxis_title_font=dict(size=20, color='black', family='Arial'),
         height=500
     )
     st.plotly_chart(fig, use_container_width=True)

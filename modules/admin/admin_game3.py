@@ -61,9 +61,11 @@ def _show_team_performance(team_scores):
         textposition='outside'
     ))
     fig.update_layout(
-        title="Team Performance - Memory Game",
+        title="Team Leistung - Memory Spiel",
         xaxis_title="Team",
-        yaxis_title="Success Rate (%)",
+        yaxis_title="Erfolgsquote (%)",
+        xaxis_title_font=dict(size=20, color='black', family='Arial'),
+        yaxis_title_font=dict(size=20, color='black', family='Arial'),
         height=500,
         xaxis_tickangle=-45
     )
@@ -72,20 +74,30 @@ def _show_team_performance(team_scores):
 
 def _show_answer_distribution_per_round(memory_data):
     """Show which teams chose which answers for each round."""
-    st.markdown("**Answer Distribution: Which teams chose A, B, C, D for each round**")
+    st.markdown("**Antwortverteilung: Welche Teams haben A, B, C, D für jede Runde gewählt**")
     
     rounds = sorted(memory_data['round_number'].unique())
+    
+    # Initialize session state for showing answers
+    if 'show_answers' not in st.session_state:
+        st.session_state.show_answers = {}
     
     for round_num in rounds:
         round_data = memory_data[memory_data['round_number'] == round_num]
         
-        st.markdown(f"##### Round {int(round_num)}")
+        st.markdown(f"##### Runde {int(round_num)}")
         
         # Button to reveal correct answer
         col1, col2 = st.columns([3, 1])
         with col2:
-            show_answer = st.button("Answer", key=f"reveal_round_{int(round_num)}", 
-                                   type="secondary", use_container_width=True)
+            button_key = f"reveal_round_{int(round_num)}"
+            if st.button("Antwort zeigen", key=button_key, 
+                        type="secondary", use_container_width=True):
+                # Toggle the state
+                st.session_state.show_answers[round_num] = not st.session_state.show_answers.get(round_num, False)
+        
+        # Check if answer should be shown
+        show_answer = st.session_state.show_answers.get(round_num, False)
         
         # Count answers
         answer_counts = round_data['team_answer'].value_counts().sort_index()
@@ -118,19 +130,21 @@ def _show_answer_distribution_per_round(memory_data):
         ))
         
         # Show correct answer in title if button clicked
-        chart_title = f"Correct Answer: {correct_answer}" if show_answer else "Answer Distribution"
+        chart_title = f"Richtige Antwort: {correct_answer}" if show_answer else "Antwortverteilung"
         
         fig.update_layout(
-            xaxis_title="Answer Option",
-            yaxis_title="Number of Teams",
-            height=300,
+            xaxis_title="Antwort Option",
+            yaxis_title="Anzahl Teams",
+            xaxis_title_font=dict(size=20, color='black', family='Arial'),
+            yaxis_title_font=dict(size=20, color='black', family='Arial'),
+            height=400,
             title=chart_title
         )
         
         st.plotly_chart(fig, use_container_width=True, key=f"answer_dist_round_{int(round_num)}")
         
         # Show which teams chose what
-        with st.expander(f"View team details for Round {int(round_num)}"):
+        with st.expander(f"Teamdetails für Runde {int(round_num)} anzeigen"):
             for option in all_options:
                 teams_with_option = round_data[round_data['team_answer'] == option]['team_name'].tolist()
                 if teams_with_option:

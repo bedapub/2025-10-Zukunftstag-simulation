@@ -31,16 +31,25 @@ def create_histogram_with_points(data, column, title, color, person_names_col=No
         y=[0] * len(data),
         mode='markers',
         marker=dict(color=color, size=10, symbol='diamond'),
-        name='Individual measurements',
-        hovertemplate='%{text}<br>Value: %{x}<extra></extra>' if hover_text else None,
+        name='Messungen',
+        hovertemplate='%{text}<br>Wert: %{x}<extra></extra>' if hover_text else None,
         text=hover_text
     ))
     
     fig.update_layout(
         title=title,
         xaxis_title=column.replace('_', ' ').title(),
-        yaxis_title="Frequency",
-        height=400
+        yaxis_title="Häufigkeit",
+        height=600,
+        title_font=dict(size=32, color='black', family='Arial Black'),
+        xaxis_title_font=dict(size=20, color='black', family='Arial'),
+        yaxis_title_font=dict(size=20, color='black', family='Arial'),
+        xaxis_tickfont=dict(size=18, color='black', family='Arial'),
+        yaxis_tickfont=dict(size=18, color='black', family='Arial'),
+        font=dict(size=18, color='black', family='Arial'),
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        margin=dict(l=120, r=280, t=100, b=80)
     )
     
     return fig
@@ -80,7 +89,25 @@ def create_boxplot_comparison(data1, data2, name1, name2, color1, color2, title,
     fig.update_layout(
         title=title,
         yaxis_title=y_label,
-        height=500
+        height=600,
+        title_font=dict(size=32, color='black', family='Arial Black'),
+        xaxis_title_font=dict(size=20, color='black', family='Arial'),
+        yaxis_title_font=dict(size=20, color='black', family='Arial'),
+        xaxis_tickfont=dict(size=18, color='black', family='Arial'),
+        yaxis_tickfont=dict(size=18, color='black', family='Arial'),
+        font=dict(size=18, color='black', family='Arial'),
+        legend=dict(
+            font=dict(size=14, family='Arial'),
+            x=1.02,  # Position legend outside plot area
+            y=1,
+            xanchor='left',
+            yanchor='top',
+            orientation='v',
+            itemwidth=30
+        ),
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        margin=dict(l=120, r=280, t=100, b=80)  # Extra right margin for legend
     )
     
     return fig
@@ -108,8 +135,17 @@ def create_bar_chart_with_highlight(data, x_col, y_col, title, x_label, y_label,
         title=title,
         xaxis_title=x_label,
         yaxis_title=y_label,
-        height=500,
-        xaxis_tickangle=-45
+        height=600,
+        xaxis_tickangle=-45,
+        title_font=dict(size=32, color='black', family='Arial Black'),
+        xaxis_title_font=dict(size=20, color='black', family='Arial'),
+        yaxis_title_font=dict(size=20, color='black', family='Arial'),
+        xaxis_tickfont=dict(size=18, color='black', family='Arial'),
+        yaxis_tickfont=dict(size=18, color='black', family='Arial'),
+        font=dict(size=18, color='black', family='Arial'),
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        margin=dict(l=120, r=280, t=100, b=80)
     )
     
     return fig
@@ -154,7 +190,7 @@ def create_treatment_comparison_boxplot(placebo_before, placebo_after, medicine_
     # Placebo Before
     fig.add_trace(go.Box(
         y=placebo_before,
-        name='Placebo Before',
+        name='Placebo Vorher',
         marker_color=config.COLOR_PLACEBO,
         boxmean=True,
         x0='Placebo',
@@ -164,7 +200,7 @@ def create_treatment_comparison_boxplot(placebo_before, placebo_after, medicine_
     # Placebo After
     fig.add_trace(go.Box(
         y=placebo_after,
-        name='Placebo After',
+        name='Placebo Nachher',
         marker_color=config.COLOR_PLACEBO,
         boxmean=True,
         x0='Placebo',
@@ -174,7 +210,7 @@ def create_treatment_comparison_boxplot(placebo_before, placebo_after, medicine_
     # Medicine Before
     fig.add_trace(go.Box(
         y=medicine_before,
-        name='Medicine Before',
+        name='Medikament Vorher',
         marker_color=config.COLOR_MEDICINE,
         boxmean=True,
         x0='Medicine',
@@ -184,7 +220,7 @@ def create_treatment_comparison_boxplot(placebo_before, placebo_after, medicine_
     # Medicine After
     fig.add_trace(go.Box(
         y=medicine_after,
-        name='Medicine After',
+        name='Medikament Nachher',
         marker_color=config.COLOR_MEDICINE,
         boxmean=True,
         x0='Medicine',
@@ -192,12 +228,30 @@ def create_treatment_comparison_boxplot(placebo_before, placebo_after, medicine_
     ))
     
     fig.update_layout(
-        title="Clinical Trial Results: Before vs After Treatment",
-        yaxis_title="Pain Score (0-10)",
-        xaxis_title="Treatment Group",
-        height=500,
+        title="Klinische Studie: Vorher vs Nachher Behandlung",
+        yaxis_title="Schmerzwert (0-10)",
+        xaxis_title="Behandlungsgruppe",
+        height=600,
         boxmode='group',
-        showlegend=True
+        showlegend=True,
+        title_font=dict(size=32, color='black', family='Arial Black'),
+        xaxis_title_font=dict(size=20, color='black', family='Arial'),
+        yaxis_title_font=dict(size=20, color='black', family='Arial'),
+        xaxis_tickfont=dict(size=18, color='black', family='Arial'),
+        yaxis_tickfont=dict(size=18, color='black', family='Arial'),
+        font=dict(size=18, color='black', family='Arial'),
+        legend=dict(
+            font=dict(size=14, family='Arial'),
+            x=1.02,
+            y=1,
+            xanchor='left',
+            yanchor='top',
+            orientation='v',
+            itemwidth=30
+        ),
+        plot_bgcolor='white',
+        paper_bgcolor='white',
+        margin=dict(l=120, r=280, t=100, b=80)
     )
     
     return fig

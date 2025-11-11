@@ -67,7 +67,7 @@ def show_clinical_trial_simulation(db: ZukunftstagDatabase, team_name: str, pare
             st.markdown(f"**{parent_name}s Werte:**")
             
             parent_before = st.number_input(
-                "Vor dem Medikament:",
+                "Vor der Behandlung:",
                 min_value=0,
                 max_value=10,
                 value=5,
@@ -77,7 +77,7 @@ def show_clinical_trial_simulation(db: ZukunftstagDatabase, team_name: str, pare
             )
             
             parent_after = st.number_input(
-                "Nach dem Medikament:",
+                "Nach der Behandlung:",
                 min_value=0,
                 max_value=10,
                 value=5,
@@ -90,7 +90,7 @@ def show_clinical_trial_simulation(db: ZukunftstagDatabase, team_name: str, pare
             st.markdown(f"**{child_name}s Werte:**")
             
             child_before = st.number_input(
-                "Vor dem Medikament:",
+                "Vor der Behandlung:",
                 min_value=0,
                 max_value=10,
                 value=5,

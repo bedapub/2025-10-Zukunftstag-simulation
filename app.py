@@ -92,6 +92,67 @@ st.markdown("""
         border-radius: 0.5rem;
         margin-bottom: 1rem;
     }
+    
+    /* Force Plotly charts to maintain font sizes - IMPORTANT! */
+    .js-plotly-plot .plotly .gtitle {
+        font-size: 36px !important;
+        font-family: 'Arial Black', Arial, sans-serif !important;
+        font-weight: bold !important;
+    }
+    
+    /* Axis titles */
+    .js-plotly-plot .plotly .xtitle,
+    .js-plotly-plot .plotly .ytitle {
+        font-size: 20px !important;
+        font-family: Arial, sans-serif !important;
+        font-weight: normal !important;
+    }
+    
+    /* Axis tick labels - MORE SPECIFIC TARGETING */
+    .js-plotly-plot .plotly .xtick text,
+    .js-plotly-plot .plotly .ytick text,
+    .js-plotly-plot .plotly .xaxislayer-above text,
+    .js-plotly-plot .plotly .yaxislayer-above text,
+    .js-plotly-plot svg g.xtick text,
+    .js-plotly-plot svg g.ytick text {
+        font-size: 18px !important;
+        font-family: Arial, sans-serif !important;
+    }
+    
+    /* Legend text - MORE SPECIFIC TARGETING - NOT BOLD */
+    .js-plotly-plot .plotly .legend text,
+    .js-plotly-plot .plotly .legendtext,
+    .js-plotly-plot svg g.legend text {
+        font-size: 14px !important;
+        font-family: Arial, sans-serif !important;
+        font-weight: normal !important;
+        white-space: normal !important;
+        max-width: 250px !important;
+        word-wrap: break-word !important;
+    }
+    
+    /* Legend container for better wrapping */
+    .js-plotly-plot .plotly .legend {
+        max-width: 250px !important;
+    }
+    
+    .js-plotly-plot svg g.legend .legendtext {
+        white-space: normal !important;
+        word-wrap: break-word !important;
+    }
+    
+    /* Annotation text */
+    .js-plotly-plot .plotly .annotation text,
+    .js-plotly-plot svg g.annotation-text-g text {
+        font-size: 18px !important;
+        font-family: Arial, sans-serif !important;
+    }
+    
+    /* NUCLEAR OPTION: Target ALL text in Plotly charts */
+    .js-plotly-plot svg text {
+        font-size: 18px !important;
+    }
+
 </style>
 """, unsafe_allow_html=True)
 

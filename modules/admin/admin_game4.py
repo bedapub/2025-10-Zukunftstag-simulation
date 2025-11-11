@@ -47,7 +47,7 @@ def show_game4_analysis(db):
     
     # Visualizations
     st.markdown("#### Visualizations")
-    viz_tab1, viz_tab2 = st.tabs(["Treatment Effects Boxplot", "Individual Changes"])
+    viz_tab1, viz_tab2 = st.tabs(["Behandlungseffekte Boxplot", "Individuelle Änderungen"])
     
     with viz_tab1:
         _show_treatment_boxplot(placebo_data, molekul_data)
@@ -132,7 +132,7 @@ def _show_individual_changes(placebo_data, molekul_data):
         x=['Before', 'After'],
         y=[placebo_data['before'].mean(), placebo_data['after'].mean()],
         mode='lines+markers',
-        name='Placebo (mean)',
+        name='Placebo',
         line=dict(color='blue', width=4),
         marker=dict(size=12)
     ))
@@ -141,15 +141,17 @@ def _show_individual_changes(placebo_data, molekul_data):
         x=['Before', 'After'],
         y=[molekul_data['before'].mean(), molekul_data['after'].mean()],
         mode='lines+markers',
-        name='Medicine (mean)',
+        name='Medikament',
         line=dict(color='green', width=4),
         marker=dict(size=12)
     ))
     
     fig.update_layout(
-        title="Individual Patient Changes: Before vs After Treatment",
-        yaxis_title="Pain Score (0-10)",
-        xaxis_title="Time Point",
+        title="Individuelle Patientenänderungen: Vorher vs Nachher Behandlung",
+        yaxis_title="Schmerzwert (0-10)",
+        xaxis_title="Zeitpunkt",
+        xaxis_title_font=dict(size=20, color='black', family='Arial'),
+        yaxis_title_font=dict(size=20, color='black', family='Arial'),
         height=500
     )
     
