@@ -16,6 +16,30 @@ def show_tech_check_page(db: ZukunftstagDatabase):
     # Check if team name was provided via QR code
     qr_team_name = st.session_state.get('qr_team_name', '')
     
+    # Check if this team is already registered (in case they landed here directly)
+    if qr_team_name and st.session_state.get('team_registered', False):
+        st.success(f"Willkommen zurück, **{st.session_state.get('parent_name')}** und **{st.session_state.get('child_name')}**!")
+        st.info("Ihr seid bereits registriert. Ihr könnt direkt weitermachen!")
+        
+        progress = db.get_team_progress(qr_team_name)
+        
+        # Navigate to the next incomplete game
+        if st.button("Weitermachen", type="primary", use_container_width=True):
+            if not progress['game1']:
+                st.session_state.current_page = 'game1'
+            elif not progress['game2']:
+                st.session_state.current_page = 'game2'
+            elif not progress['game3']:
+                st.session_state.current_page = 'game3'
+            elif not progress['game4']:
+                st.session_state.current_page = 'game4'
+            elif not progress['feedback']:
+                st.session_state.current_page = 'feedback'
+            else:
+                st.session_state.current_page = 'feedback'
+            st.rerun()
+        return
+    
     # Get available team names
     available_teams = list(db.max_team_names.keys())
     

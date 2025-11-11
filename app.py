@@ -184,8 +184,48 @@ def handle_qr_code_landing():
         # QR code contains team name - store it in session state
         st.session_state.qr_team_name = team_param
         st.session_state.from_qr_code = True
-        st.session_state.current_page = 'tech_check'
         st.session_state.qr_processed = True
+        
+        # Check if this team is already registered and has progress
+        db = ZukunftstagDatabase()
+        conn = db.get_connection()
+        cursor = conn.cursor()
+        session_id = db.get_current_session_id()
+        
+        # Check if team exists in database
+        cursor.execute("SELECT parent_name, child_name FROM teams WHERE team_name = ? AND session_id = ?", 
+                      (team_param, session_id))
+        result = cursor.fetchone()
+        conn.close()
+        
+        if result:
+            # Team is already registered - restore their session
+            parent_name, child_name = result
+            st.session_state.team_name = team_param
+            st.session_state.parent_name = parent_name
+            st.session_state.child_name = child_name
+            st.session_state.team_registered = True
+            
+            # Get team progress and navigate to the appropriate page
+            progress = db.get_team_progress(team_param)
+            
+            # Find the last incomplete game to continue from
+            if not progress['game1']:
+                st.session_state.current_page = 'game1'
+            elif not progress['game2']:
+                st.session_state.current_page = 'game2'
+            elif not progress['game3']:
+                st.session_state.current_page = 'game3'
+            elif not progress['game4']:
+                st.session_state.current_page = 'game4'
+            elif not progress['feedback']:
+                st.session_state.current_page = 'feedback'
+            else:
+                # All games completed - go to feedback or home
+                st.session_state.current_page = 'feedback'
+        else:
+            # New team - go to tech check for registration
+            st.session_state.current_page = 'tech_check'
 
 def show_main_app(db: ZukunftstagDatabase):
     """Show the main application interface."""
