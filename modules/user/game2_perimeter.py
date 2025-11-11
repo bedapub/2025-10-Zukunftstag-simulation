@@ -47,6 +47,7 @@ def show_game2_page(db: ZukunftstagDatabase):
                 min_value=5.0,
                 max_value=100.0,
                 step=0.1,
+                key="game2_parent_estimate",
                 help="Wie viele Meter hat der Raumumfang eurer Meinung nach?"
             )
         
@@ -56,6 +57,7 @@ def show_game2_page(db: ZukunftstagDatabase):
                 min_value=5.0,
                 max_value=100.0,
                 step=0.1,
+                key="game2_child_estimate",
                 help="Wie viele Meter hat der Raumumfang eurer Meinung nach?"
             )
         
