@@ -95,20 +95,6 @@ def get_molecule_questions():
             "description": "Neurotransmitter for movement and mood",
             "options": ["A", "B", "C", "D"],
             "correct": "C"
-        },
-        {
-            "round": 4,
-            "molecule": "Baloxavir marboxil",
-            "description": "Antiviral medication for influenza",
-            "options": ["A", "B", "C", "D"],
-            "correct": "D"
-        },
-        {
-            "round": 5,
-            "molecule": "Risdiplam",
-            "description": "Treatment for spinal muscular atrophy",
-            "options": ["A", "B", "C", "D"],
-            "correct": "A"
         }
     ]
 
