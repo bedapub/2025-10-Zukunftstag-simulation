@@ -57,7 +57,7 @@ def generate_qr_codes():
         margin = 60
         title_section = 140
         team_section = 140
-        pain_section = 280  # New section for pain scores
+        pain_section = 280  # Section for pain scores
         
         total_width = qr_size + (2 * margin)
         total_height = margin + title_section + qr_size + team_section + pain_section + margin
@@ -151,9 +151,11 @@ def generate_qr_codes():
             draw.text(((total_width - pain_section_width) // 2, y_pos), pain_section_title, fill='#CC0000', font=pain_title_font)
             y_pos += 40
             
-            # Parent scores
-            parent_text = f"ELTERN:"
-            draw.text((margin + 20, y_pos), parent_text, fill='#000000', font=pain_title_font)
+            # Parent scores with medication color
+            parent_med_color = '#CC0000' if clinical_data['parent_treatment'] == 'Placebo' else '#000000'
+            parent_med_text = "Rot" if clinical_data['parent_treatment'] == 'Placebo' else "Schwarz"
+            parent_text = f"ELTERN ({parent_med_text}):"
+            draw.text((margin + 20, y_pos), parent_text, fill=parent_med_color, font=pain_title_font)
             y_pos += 35
             
             vor_text = f"  Vor der Behandlung: {clinical_data['parent_before']}"
@@ -164,9 +166,11 @@ def generate_qr_codes():
             draw.text((margin + 40, y_pos), nach_text, fill='#333333', font=pain_font)
             y_pos += 40
             
-            # Child scores
-            child_text = f"KIND:"
-            draw.text((margin + 20, y_pos), child_text, fill='#000000', font=pain_title_font)
+            # Child scores with medication color
+            child_med_color = '#CC0000' if clinical_data['child_treatment'] == 'Placebo' else '#000000'
+            child_med_text = "Rot" if clinical_data['child_treatment'] == 'Placebo' else "Schwarz"
+            child_text = f"KIND ({child_med_text}):"
+            draw.text((margin + 20, y_pos), child_text, fill=child_med_color, font=pain_title_font)
             y_pos += 35
             
             vor_text = f"  Vor der Behandlung: {clinical_data['child_before']}"
