@@ -286,6 +286,10 @@ def show_sidebar_navigation(db: ZukunftstagDatabase):
     # Navigation menu
     st.sidebar.markdown("### Navigation")
     
+    # Add helpful message for free navigation
+    if st.session_state.get('team_registered', False):
+        st.sidebar.info("💡 Ihr könnt jederzeit zwischen den Spielen wechseln!")
+    
     nav_options = {
         'tech_check': 'Tech Check',
         'game1': 'Spiel 1: Größen',
@@ -295,8 +299,12 @@ def show_sidebar_navigation(db: ZukunftstagDatabase):
         'feedback': 'Feedback'
     }
     
+    current_page = st.session_state.get('current_page', 'home')
+    
     for page_key, page_label in nav_options.items():
-        if st.sidebar.button(page_label, key=f"nav_{page_key}", use_container_width=True):
+        # Highlight current page
+        button_type = "primary" if page_key == current_page else "secondary"
+        if st.sidebar.button(page_label, key=f"nav_{page_key}", use_container_width=True, type=button_type):
             st.session_state.current_page = page_key
             st.rerun()
     
