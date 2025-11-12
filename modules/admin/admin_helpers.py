@@ -98,7 +98,7 @@ def create_boxplot_comparison(data1, data2, name1, name2, color1, color2, title,
         font=dict(size=18, color='black', family='Arial'),
         legend=dict(
             font=dict(size=14, family='Arial'),
-            x=1.02,  # Position legend outside plot area
+            x=1.02,
             y=1,
             xanchor='left',
             yanchor='top',
@@ -107,7 +107,7 @@ def create_boxplot_comparison(data1, data2, name1, name2, color1, color2, title,
         ),
         plot_bgcolor='white',
         paper_bgcolor='white',
-        margin=dict(l=120, r=280, t=100, b=80)  # Extra right margin for legend
+        margin=dict(l=120, r=280, t=100, b=80)
     )
     
     return fig

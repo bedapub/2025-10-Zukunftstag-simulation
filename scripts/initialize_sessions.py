@@ -17,10 +17,10 @@ def initialize_sessions():
     sessions = [
         ("morning_session", "Morning Session (09:00 - 11:30)", False),
         ("afternoon_session", "Afternoon Session (13:30 - 16:00)", False),
-        ("test_session", "Test Session (Development)", True)  # Default active
+        ("test_session", "Test Session (Development)", True)
     ]
     
-    # First, deactivate all sessions
+    # Deactivate all sessions
     conn = db.get_connection()
     cursor = conn.cursor()
     cursor.execute("UPDATE sessions SET is_active = 0")

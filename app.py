@@ -159,13 +159,8 @@ st.markdown("""
 def main():
     """Main application function."""
     
-    # Initialize session state
     init_session_state()
-    
-    # Initialize database
     db = ZukunftstagDatabase()
-    
-    # Handle QR code landing (NEW: No team name in URL anymore)
     handle_qr_code_landing()
     
     # Show main content
@@ -181,7 +176,6 @@ def handle_qr_code_landing():
     team_param = safe_get_query_param('team')
     
     if team_param and not st.session_state.get('qr_processed', False):
-        # QR code contains team name - store it in session state
         st.session_state.qr_team_name = team_param
         st.session_state.from_qr_code = True
         st.session_state.qr_processed = True
@@ -199,14 +193,14 @@ def handle_qr_code_landing():
         conn.close()
         
         if result:
-            # Team is already registered - restore their session
+            # Restore the registered Teams session
             parent_name, child_name = result
             st.session_state.team_name = team_param
             st.session_state.parent_name = parent_name
             st.session_state.child_name = child_name
             st.session_state.team_registered = True
             
-            # Get team progress and navigate to the appropriate page
+            # Get team progress
             progress = db.get_team_progress(team_param)
             
             # Find the last incomplete game to continue from
@@ -221,10 +215,8 @@ def handle_qr_code_landing():
             elif not progress['feedback']:
                 st.session_state.current_page = 'feedback'
             else:
-                # All games completed - go to feedback or home
                 st.session_state.current_page = 'feedback'
         else:
-            # New team - go to tech check for registration
             st.session_state.current_page = 'tech_check'
 
 def show_main_app(db: ZukunftstagDatabase):
@@ -259,14 +251,14 @@ def show_sidebar_navigation(db: ZukunftstagDatabase):
     st.sidebar.title("Zukunftstag")
     st.sidebar.markdown("**Mathe Macht Medikamente**")
     
-    # Prominent Home button (always visible)
+    # Prominent Home button
     st.sidebar.markdown("---")
     if st.sidebar.button("**Start**", type="primary", key="nav_home", use_container_width=True):
         st.session_state.current_page = 'home'
         st.rerun()
     st.sidebar.markdown("---")
     
-    # Team information (if registered)
+    # Team information
     if st.session_state.get('team_registered', False):
         team_name = st.session_state.get('team_name', '')
         parent_name = st.session_state.get('parent_name', '')
@@ -279,14 +271,12 @@ def show_sidebar_navigation(db: ZukunftstagDatabase):
         </div>
         """, unsafe_allow_html=True)
         
-        # Show progress
         progress = db.get_team_progress(team_name)
         show_progress_indicator(progress)
     
     # Navigation menu
     st.sidebar.markdown("### Navigation")
     
-    # Add helpful message for free navigation
     if st.session_state.get('team_registered', False):
         st.sidebar.info("💡 Ihr könnt jederzeit zwischen den Spielen wechseln!")
     
@@ -302,7 +292,6 @@ def show_sidebar_navigation(db: ZukunftstagDatabase):
     current_page = st.session_state.get('current_page', 'home')
     
     for page_key, page_label in nav_options.items():
-        # Highlight current page
         button_type = "primary" if page_key == current_page else "secondary"
         if st.sidebar.button(page_label, key=f"nav_{page_key}", use_container_width=True, type=button_type):
             st.session_state.current_page = page_key
@@ -329,7 +318,6 @@ def show_sidebar_navigation(db: ZukunftstagDatabase):
                     del st.session_state[key]
                 st.rerun()
     
-    # QR code info (if came from QR)
     if st.session_state.get('from_qr_code', False):
         st.sidebar.info("Zugang via QR-Code")
 

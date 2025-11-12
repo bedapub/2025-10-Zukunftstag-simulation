@@ -44,7 +44,7 @@ def show_clinical_trial_simulation(db: ZukunftstagDatabase, team_name: str, pare
     st.markdown(f"### Team: {team_name}")
     st.markdown("**Bitte tragt eure Schmerzwerte vom Papier ein:**")
     
-    # Show chocolate ball colors (without revealing which is which)
+    # Show chocolate ball colors
     col1, col2 = st.columns(2)
     
     with col1:
@@ -112,7 +112,6 @@ def show_clinical_trial_simulation(db: ZukunftstagDatabase, team_name: str, pare
         submitted = st.form_submit_button("Klinische Studiendaten absenden", use_container_width=True)
         
         if submitted:
-            # Calculate changes
             parent_change = parent_after - parent_before
             child_change = child_after - child_before
             
@@ -136,7 +135,6 @@ def show_existing_data(db: ZukunftstagDatabase, team_name: str):
     
     st.success("Ihr habt Spiel 4 bereits abgeschlossen!")
     
-    # Navigation
     if st.button("Weiter zum Feedback", use_container_width=True):
         st.session_state.current_page = 'feedback'
         st.rerun()

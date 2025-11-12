@@ -5,23 +5,16 @@ from pathlib import Path
 from urllib.parse import quote
 from PIL import Image, ImageDraw, ImageFont
 
-# Add parent directory to path to import database
 sys.path.append(str(Path(__file__).parent.parent))
 from database import ZukunftstagDatabase
 
 def generate_qr_codes():
     """Generate team-specific QR codes for each table in the workshop."""
-    
-    # Create QR codes directory
     qr_dir = Path("qr_codes")
     qr_dir.mkdir(exist_ok=True)
     
-    # Base URL - replace with your deployed app URL
     base_url = "https://workshop-roche-zukunftstag.streamlit.app/"
-    
-    # Initialize database to get clinical trial data
     db = ZukunftstagDatabase()
-    
     print("Generiere QR-Codes für Workshop-Tische...\n")
     
     # Read team names
@@ -31,15 +24,12 @@ def generate_qr_codes():
     
     print(f"Erstelle {len(teams)} Tisch-Bilder...\n")
     
-    # Generate a QR code with team name and info for each team
+    # Generate a QR code with team-specific URLs
     for team_name, indication in teams.items():
-        # Create team-specific URL
         team_url = f"{base_url}?team={quote(team_name)}"
         
-        # Get clinical trial data for this team
         clinical_data = db.get_clinical_trial_data(team_name)
         
-        # Generate QR code
         qr = qrcode.QRCode(
             version=1,
             error_correction=qrcode.constants.ERROR_CORRECT_L,
@@ -53,11 +43,11 @@ def generate_qr_codes():
         qr_img = qr.make_image(fill_color="black", back_color="white")
         qr_size = qr_img.size[0]
         
-        # Layout dimensions - ensure enough space for all text including pain scores
+        # Layout dimensions
         margin = 60
         title_section = 140
         team_section = 140
-        pain_section = 280  # Section for pain scores
+        pain_section = 280
         
         total_width = qr_size + (2 * margin)
         total_height = margin + title_section + qr_size + team_section + pain_section + margin

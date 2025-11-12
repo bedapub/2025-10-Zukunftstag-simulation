@@ -22,8 +22,6 @@ def show_game3_analysis(db):
     
     # Only show analysis if there's data
     if len(memory_data) == 0:
-        st.info("📊 Statistics and visualizations will appear once teams complete memory rounds.")
-        # Show data table at the end even if no data yet
         _show_editable_data_table(db, teams_data, memory_data)
         return
     
@@ -70,11 +68,11 @@ def _show_editable_data_table(db, teams_data, memory_data):
     for round_num in range(1, 4):  # 3 rounds
         edit_data[f'round_{round_num}'] = None
     
-    # Fill in existing answers (only rounds 1-3)
+    # Fill in existing answers
     if len(memory_data) > 0:
         for _, row in memory_data.iterrows():
             round_num = int(row["round_number"])
-            if round_num <= 3:  # Only process rounds 1-3
+            if round_num <= 3:
                 team_mask = edit_data['team_name'] == row['team_name']
                 round_col = f'round_{round_num}'
                 edit_data.loc[team_mask, round_col] = row['team_answer']
@@ -86,7 +84,7 @@ def _show_editable_data_table(db, teams_data, memory_data):
         "child_name": st.column_config.TextColumn("Child Name", disabled=True),
     }
     
-    for round_num in range(1, 4):  # 3 rounds
+    for round_num in range(1, 4):
         column_config[f'round_{round_num}'] = st.column_config.SelectboxColumn(
             f"Round {round_num}",
             options=["A", "B", "C", "D"],
@@ -109,7 +107,7 @@ def _show_editable_data_table(db, teams_data, memory_data):
         
         changes_saved = False
         for _, row in edited_df.iterrows():
-            for round_num in range(1, 4):  # 3 rounds
+            for round_num in range(1, 4):
                 answer_col = f'round_{round_num}'
                 if pd.notna(row[answer_col]):
                     correct_answer = questions[round_num - 1]['correct']

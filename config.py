@@ -20,21 +20,21 @@ SESSION_OPTIONS = {
 }
 
 # Game constants
-PERIMETER_GROUND_TRUTH = 28.0  # meters
-MEMORY_GAME_TOTAL_ROUNDS = 5
+PERIMETER_GROUND_TRUTH = 28.0  # m
+MEMORY_GAME_TOTAL_ROUNDS = 3
 
 # Validation constraints
 HEIGHT_MIN = 50  # cm
 HEIGHT_MAX = 250  # cm
-PERIMETER_MIN = 5  # meters
-PERIMETER_MAX = 100  # meters
+PERIMETER_MIN = 5  # m
+PERIMETER_MAX = 100  # m
 NAME_MIN_LENGTH = 2
 
-# Pain score scale for clinical trial
+# Pain score scale
 PAIN_SCORE_MIN = 0
 PAIN_SCORE_MAX = 10
 
-# Color Palette - Roche Brand Colors
+# Roche Brand Colors
 # Primary Blues
 COLOR_PRIMARY_BLUE = '#0b41cd'
 COLOR_DARK_BLUE = '#022366'
@@ -72,7 +72,7 @@ COLOR_PURPLE_2 = '#bc36f0'
 COLOR_PURPLE_3 = '#e085fc'
 COLOR_PURPLE_4 = '#f2d4ff'
 
-# Application-specific color assignments
+# Color assignments
 COLOR_PARENT = COLOR_ORANGE_1
 COLOR_CHILD = COLOR_ORANGE_2
 COLOR_PLACEBO = COLOR_PRIMARY_BLUE
@@ -82,7 +82,6 @@ COLOR_WARNING = COLOR_ORANGE_1
 COLOR_ERROR = COLOR_RED_1
 COLOR_PRIMARY = COLOR_PRIMARY_BLUE
 
-# Additional color constants used in visualizations (all darker)
 BLUE_LIGHT = COLOR_PRIMARY_BLUE
 COLOR_PLACEBO_LIGHT = COLOR_BRIGHT_BLUE
 COLOR_MEDICINE_LIGHT = COLOR_PURPLE_2
@@ -108,7 +107,7 @@ CHART_COLORS = [
 # Medals for winners
 MEDALS = ["🥇", "🥈", "🥉"]
 
-# Database random seed (for consistent simulations)
+# Database random seed
 RANDOM_SEED = 1887
 
 # File paths

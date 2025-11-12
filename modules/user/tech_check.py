@@ -16,7 +16,7 @@ def show_tech_check_page(db: ZukunftstagDatabase):
     # Check if team name was provided via QR code
     qr_team_name = st.session_state.get('qr_team_name', '')
     
-    # Check if this team is already registered (in case they landed here directly)
+    # Check if this team is already registered
     if qr_team_name and st.session_state.get('team_registered', False):
         st.success(f"Willkommen zurück, **{st.session_state.get('parent_name')}** und **{st.session_state.get('child_name')}**!")
         st.info("Ihr seid bereits registriert. Ihr könnt direkt weitermachen!")
@@ -82,10 +82,9 @@ def show_tech_check_page(db: ZukunftstagDatabase):
     with st.form("tech_check_form"):
         st.markdown("### Eure Namen")
         
-        # Team name is locked from QR code (hidden field)
+        # Team name is locked from QR code
         team_name = qr_team_name
         
-        # Pre-fill names in dev mode
         default_parent = "Anna" if config.DEV_MODE else ""
         default_child = "Sophie" if config.DEV_MODE else ""
         
@@ -95,7 +94,7 @@ def show_tech_check_page(db: ZukunftstagDatabase):
             help="Vorname des Elternteils"
         )
         
-        st.markdown("")  # Spacing
+        st.markdown("")
         
         child_name = st.text_input(
             "Name Kind:",
@@ -103,12 +102,11 @@ def show_tech_check_page(db: ZukunftstagDatabase):
             help="Vorname des Kindes"
         )
         
-        st.markdown("")  # Spacing
+        st.markdown("")
         
         submitted = st.form_submit_button("Weiter", type="primary", use_container_width=True)
         
         if submitted:
-            # Validate inputs
             parent_valid, parent_error = validate_name_input(parent_name)
             child_valid, child_error = validate_name_input(child_name)
             
@@ -117,11 +115,9 @@ def show_tech_check_page(db: ZukunftstagDatabase):
             elif not child_valid:
                 show_error_message(f"Kind: {child_error}")
             else:
-                # Register team
                 success = db.register_team(team_name, parent_name, child_name)
                 
                 if success:
-                    # Update session state
                     st.session_state.team_name = team_name
                     st.session_state.parent_name = parent_name
                     st.session_state.child_name = child_name
@@ -130,7 +126,6 @@ def show_tech_check_page(db: ZukunftstagDatabase):
                     
                     show_success_message(f"Willkommen {parent_name} und {child_name}!")
                     
-                    # Auto-advance to next page
                     st.rerun()
                 else:
                     show_error_message("Registrierung fehlgeschlagen. Bitte erneut versuchen.")

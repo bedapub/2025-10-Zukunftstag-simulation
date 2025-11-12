@@ -35,7 +35,7 @@ def show_admin_page(db: ZukunftstagDatabase):
         SQLite data may be lost when the app restarts. **Export data regularly!** 
         Use the "Download Session Data" buttons below to backup your data.
         """)
-    
+
     logout_admin()
     
     # Admin navigation tabs
@@ -128,7 +128,7 @@ def show_overview_tab(db: ZukunftstagDatabase):
     if 'last_refresh' not in st.session_state:
         st.session_state.last_refresh = datetime.now()
     
-    st.caption(f"🕐 Last updated: {st.session_state.last_refresh.strftime('%H:%M:%S')}")
+    st.caption(f"Last updated: {st.session_state.last_refresh.strftime('%H:%M:%S')}")
 
 
 def show_game_data_tab(db: ZukunftstagDatabase):

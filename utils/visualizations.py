@@ -9,9 +9,8 @@ import pandas as pd
 import numpy as np
 import streamlit as st
 import config
-
-# Configure Plotly default template with larger fonts
 import plotly.io as pio
+
 pio.templates["custom"] = go.layout.Template(
     layout=go.Layout(
         font=dict(size=18, color='black', family='Arial'),
@@ -37,7 +36,6 @@ pio.templates.default = "custom"
 
 def create_height_histogram(df, height_col, title, color):
     """Create histogram for height data."""
-    # Use darker colors
     dark_color = config.COLOR_ORANGE_1 if color in [config.COLOR_ORANGE_2, config.COLOR_PEACH_3] else config.COLOR_PRIMARY_BLUE
     
     fig = px.histogram(
@@ -70,8 +68,8 @@ def create_height_histogram(df, height_col, title, color):
         plot_bgcolor='white',
         paper_bgcolor='white',
         margin=dict(l=120, r=280, t=100, b=80),
-        width=None,  # Let Streamlit handle width
-        height=600   # Fixed height to prevent font scaling
+        width=None,
+        height=600
     )
     
     # Add individual points
@@ -100,7 +98,6 @@ def create_scatter_plot(df, x_col, y_col, title, hover_data=None):
         hover_data=hover_data
     )
     
-    # Update marker size and color
     fig.update_traces(marker=dict(size=12, color=config.COLOR_PRIMARY_BLUE, line=dict(width=2, color='white')))
     
     # Add correlation line
@@ -167,7 +164,6 @@ def create_boxplot(df, value_cols, titles, ground_truth=None):
     """Create side-by-side boxplots."""
     fig = go.Figure()
     
-    # Use darker colors for boxes
     box_colors = [config.COLOR_ORANGE_1, config.COLOR_PRIMARY_BLUE, config.COLOR_PURPLE_1]
     
     for i, (col, title) in enumerate(zip(value_cols, titles)):
@@ -227,7 +223,7 @@ def create_perimeter_ranking_chart(df, ground_truth=28):
     
     fig = go.Figure()
     
-    # Parent estimates - darker color
+    # Parent estimates
     fig.add_trace(
         go.Bar(
             y=df_sorted['team_name'],
@@ -283,10 +279,8 @@ def create_clinical_trial_boxplot(df_melted):
         color_discrete_map={'Before': config.COLOR_GRAY_2, 'After': config.COLOR_PURPLE_1}
     )
     
-    # Update box line width
     fig.update_traces(line=dict(width=3), marker=dict(size=10))
     
-    # Add individual points with darker color
     fig.add_trace(
         go.Scatter(
             x=df_melted['treatment'],
@@ -331,7 +325,6 @@ def create_memory_game_results(df):
     team_scores = df.groupby('team_name')['is_correct'].sum().reset_index()
     team_scores = team_scores.sort_values('is_correct', ascending=False)
     
-    # Use darker color gradient
     fig = px.bar(
         team_scores,
         x='team_name',
@@ -370,7 +363,6 @@ def create_round_results_chart(df, round_num):
         labels={'x': 'Auswahl', 'y': 'Anzahl Teams'}
     )
     
-    # Highlight correct answer with darker colors
     correct_answer = round_data['correct_answer'].iloc[0] if len(round_data) > 0 else None
     if correct_answer:
         colors = [config.COLOR_PRIMARY_BLUE if x == correct_answer else config.COLOR_ORANGE_1 for x in choice_counts.index]
@@ -395,7 +387,7 @@ def create_feedback_summary(df):
     col1, col2 = st.columns(2)
     
     with col1:
-        # Rating distribution with darker colors
+        # Rating distribution
         rating_counts = df['overall_rating'].value_counts().sort_index()
         fig_rating = px.bar(
             x=rating_counts.index,
@@ -422,7 +414,7 @@ def create_feedback_summary(df):
         st.plotly_chart(fig_rating, width="stretch")
     
     with col2:
-        # Favorite game distribution with darker colors
+        # Favorite game distribution
         game_counts = df['favorite_game'].value_counts()
         dark_colors = [config.COLOR_PRIMARY_BLUE, config.COLOR_ORANGE_1, 
                       config.COLOR_PURPLE_1, config.COLOR_RED_2]
@@ -493,7 +485,6 @@ def create_favorite_game_pie_chart(feedback_df):
     """Create pie chart for favorite game distribution."""
     favorite_counts = feedback_df['favorite_game'].value_counts()
     
-    # Use darker colors for pie chart
     dark_colors = [config.COLOR_PRIMARY_BLUE, config.COLOR_ORANGE_1, config.COLOR_PURPLE_1, config.COLOR_RED_2]
     
     fig = go.Figure()
@@ -528,7 +519,7 @@ def create_favorite_game_pie_chart(feedback_df):
 
 def create_team_performance_bar_chart(team_scores, title="Team Leistung"):
     """Create horizontal bar chart for team performance with medals for top 3."""
-    # Define medal colors (darker)
+    # Define medal colors
     GOLD_DARK = '#D4AF37'
     SILVER_DARK = '#8C8C8C'
     BRONZE_DARK = '#8C5E3B'
@@ -567,7 +558,6 @@ def create_perimeter_winners_chart(perimeter_data, person_col, delta_col, abs_de
     """Create horizontal bar chart for perimeter estimation winners."""
     sorted_data = perimeter_data.sort_values(abs_delta_col)
     
-    # Use darker color
     dark_color = config.COLOR_PRIMARY_BLUE if color == config.BLUE_LIGHT else config.COLOR_ORANGE_1
     
     fig = go.Figure()
@@ -601,7 +591,7 @@ def create_clinical_treatment_comparison(placebo_data, molekul_data):
     """Create boxplot comparing clinical trial treatment groups before/after."""
     fig = go.Figure()
     
-    # Placebo Before - darker
+    # Placebo Before
     fig.add_trace(go.Box(
         y=placebo_data['parent_before'],
         name='Placebo Vorher',
@@ -613,7 +603,7 @@ def create_clinical_treatment_comparison(placebo_data, molekul_data):
         marker=dict(size=10)
     ))
     
-    # Placebo After - darker
+    # Placebo After
     fig.add_trace(go.Box(
         y=placebo_data['parent_after'],
         name='Placebo Nachher',
@@ -625,7 +615,7 @@ def create_clinical_treatment_comparison(placebo_data, molekul_data):
         marker=dict(size=10)
     ))
     
-    # Medicine Before - darker
+    # Medicine Before
     fig.add_trace(go.Box(
         y=molekul_data['parent_before'],
         name='Medikament Vorher',
@@ -637,7 +627,7 @@ def create_clinical_treatment_comparison(placebo_data, molekul_data):
         marker=dict(size=10)
     ))
     
-    # Medicine After - darker
+    # Medicine After
     fig.add_trace(go.Box(
         y=molekul_data['parent_after'],
         name='Medikament Nachher',
@@ -694,7 +684,7 @@ def add_correlation_line(fig, x_data, y_data, x_col_name, y_col_name):
         line=dict(color=config.COLOR_RED_2, width=4)
     ))
     
-    # Add median lines with darker color
+    # Add median lines
     median_x = x_data.median()
     median_y = y_data.median()
     

@@ -20,11 +20,11 @@ def generate_test_data():
     
     print("🔧 Generating test data for development...")
     
-    # Set random seeds for reproducibility (same as notebook)
+    # Set random seeds for reproducibility
     random.seed(1887)
     np.random.seed(1887)
     
-    # Initialize database (creates all tables)
+    # Initialize database
     db = ZukunftstagDatabase()
     
     # Connect to database
@@ -32,7 +32,7 @@ def generate_test_data():
     conn = sqlite3.connect('zukunftstag.db')
     cursor = conn.cursor()
     
-    # Read team names and parent/child names from files
+    # Read names from files
     with open('data/team_namen.txt', 'r', encoding='utf-8') as f:
         team_lines = [line.strip() for line in f.readlines() if line.strip()]
         all_teams = dict(item.split(":") for item in team_lines)
@@ -49,9 +49,7 @@ def generate_test_data():
     
     print(f"\n📋 Creating {n_teams} test teams...")
     
-    # Generate heights using multivariate normal (correlated parent/child heights)
-    # Same as notebook: mean=[180, 120], cov=[[15, 7], [7, 15]]
-    # Round to integers (heights in cm should be whole numbers)
+    # Generate heights
     heights = np.around(np.random.multivariate_normal(
         mean=[180, 120], 
         cov=[[15, 7], [7, 15]], 
@@ -60,14 +58,12 @@ def generate_test_data():
     parent_heights = heights[0]
     child_heights = heights[1]
     
-    # Generate perimeter estimates (same as notebook)
+    # Generate perimeter estimates
     ground_truth = 28.0
     parent_perimeter = np.around(np.random.normal(ground_truth * 1.2, scale=5, size=n_teams), 2)
     child_perimeter = np.around(np.random.normal(ground_truth * 0.9, scale=8, size=n_teams), 1)
     
-    # Generate clinical trial data (same as notebook)
-    # Placebo: loc=0, scale=1
-    # Medicine: loc=3, scale=1
+    # Generate clinical trial data
     placebo_before = np.random.randint(5, 11, size=n_teams)
     placebo_effect = np.random.normal(loc=0, scale=1, size=n_teams).astype(int)
     placebo_after = np.clip(placebo_before - placebo_effect, a_min=0, a_max=10)
@@ -76,7 +72,7 @@ def generate_test_data():
     medicine_effect = np.random.normal(loc=3, scale=1, size=n_teams).astype(int)
     medicine_after = np.clip(medicine_before - medicine_effect, a_min=0, a_max=10)
     
-    # Assign treatments (half get placebo, half get medicine for parent)
+    # Assign treatments
     parent_placebo_teams = random.sample(team_names, k=n_teams//2)
     
     for idx, team_name in enumerate(team_names):
@@ -92,13 +88,13 @@ def generate_test_data():
         
         print(f"  ✅ {team_name}: {parent_name} & {child_name}")
         
-        # Add Game 1 data (Heights) - using correlated heights from notebook
+        # Add Game 1 data
         cursor.execute("""
             INSERT OR REPLACE INTO game1_heights (team_name, parent_height, child_height, session_id, submitted_at)
             VALUES (?, ?, ?, 'test_session', ?)
         """, (team_name, int(parent_heights[idx]), int(child_heights[idx]), datetime.now().isoformat()))
         
-        # Add Game 2 data (Perimeter) - using notebook distributions
+        # Add Game 2 data
         parent_est = float(parent_perimeter[idx])
         child_est = float(child_perimeter[idx])
         cursor.execute("""
@@ -112,7 +108,7 @@ def generate_test_data():
               abs(parent_est - ground_truth), abs(child_est - ground_truth),
               datetime.now().isoformat()))
         
-        # Add Game 3 data (Memory) - random 5 rounds
+        # Add Game 3 data
         for round_num in range(1, 6):
             correct = random.choice([True, False])
             correct_answer = f"molecule_{round_num}"
@@ -123,8 +119,7 @@ def generate_test_data():
                 ) VALUES (?, ?, ?, ?, ?, 'test_session', ?)
             """, (team_name, round_num, correct_answer, team_answer, correct, datetime.now().isoformat()))
         
-        # Add Game 4 data (Clinical Trial) - using notebook approach
-        # Parent gets placebo or medicine based on assignment
+        # Add Game 4 data
         if team_name in parent_placebo_teams:
             parent_treatment = 'placebo'
             parent_before = int(placebo_before[idx])

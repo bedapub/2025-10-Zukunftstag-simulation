@@ -17,7 +17,7 @@ def show_game2_analysis(db):
                            "Teams will appear here after completing Tech Check. Results will update as teams submit their perimeter estimates.")
         return
     
-    # Get perimeter data (refresh from database)
+    # Get perimeter data
     perimeter_data = db.get_game_data(2)
     
     # Merge with team info for analysis
@@ -26,8 +26,6 @@ def show_game2_analysis(db):
     
     # Only show analysis if there's data
     if len(perimeter_data) == 0:
-        st.info("📊 Statistics and visualizations will appear once teams submit their perimeter estimates.")
-        # Show data table at the end even if no data yet
         _show_editable_data_table(db, teams_data, perimeter_data)
         return
     
@@ -83,10 +81,10 @@ def _show_editable_data_table(db, teams_data, perimeter_data):
     st.markdown("---")
     st.markdown("#### Data Table (Editable)")
     
-    # Prepare data for editing - always refresh from database
+    # Prepare data for editing
     edit_data = teams_data[['team_name', 'parent_name', 'child_name']].copy()
     
-    # Add perimeter columns - merge fresh data from database
+    # Add perimeter columns
     if len(perimeter_data) > 0:
         edit_data = edit_data.merge(
             perimeter_data[['team_name', 'parent_estimate', 'child_estimate']], 

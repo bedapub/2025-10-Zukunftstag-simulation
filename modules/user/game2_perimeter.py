@@ -5,7 +5,6 @@ from utils.helpers import (
     validate_perimeter, show_error_message, show_success_message
 )
 
-# Ground truth perimeter value
 GROUND_TRUTH_PERIMETER = 28.0
 
 def show_game2_page(db: ZukunftstagDatabase):
@@ -64,7 +63,6 @@ def show_game2_page(db: ZukunftstagDatabase):
         submitted = st.form_submit_button("Schätzungen absenden", use_container_width=True)
         
         if submitted:
-            # Validate inputs
             parent_valid, parent_error = validate_perimeter(parent_estimate)
             child_valid, child_error = validate_perimeter(child_estimate)
             
@@ -73,13 +71,11 @@ def show_game2_page(db: ZukunftstagDatabase):
             elif not child_valid:
                 show_error_message(f"{child_name}s Schätzung: {child_error}")
             else:
-                # Save data
                 success = db.save_game2_data(team_name, parent_estimate, child_estimate)
                 
                 if success:
                     show_success_message("Schätzungen erfolgreich gespeichert!")
                     
-                    # Show immediate feedback
                     show_team_results(parent_name, parent_estimate, child_name, child_estimate)
                     
                     st.rerun()
@@ -135,7 +131,6 @@ def show_existing_data(db: ZukunftstagDatabase, team_name: str):
     
     st.success("Ihr habt Spiel 2 bereits abgeschlossen!")
     
-    # Navigation
     if st.button("Weiter zu Spiel 3", use_container_width=True):
         st.session_state.current_page = 'game3'
         st.rerun()

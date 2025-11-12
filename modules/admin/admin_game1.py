@@ -31,7 +31,6 @@ def show_game1_analysis(db):
     
     # Only show analysis if there's data
     if len(heights_data) == 0:
-        st.info("📊 Statistics and visualizations will appear once teams submit their height measurements.")
         # Show data table at the end even if no data yet
         _show_editable_data_table(db, teams_data, heights_data)
         return

@@ -19,20 +19,17 @@ class ZukunftstagDatabase:
     """Database helper class for the Zukunftstag simulation app."""
     
     def __init__(self, db_path: str = "zukunftstag.db"):
-        # Use absolute path to ensure consistency
         self.db_path = os.path.abspath(db_path)
         
-        # Check if database exists before initialization
         db_exists = os.path.exists(self.db_path)
         
         self.init_database()
         self.load_simulation_data()
         
-        # Log database status for debugging
         if not db_exists:
-            print(f"⚠️  Created new database at: {self.db_path}")
+            print(f"Created new database at: {self.db_path}")
         else:
-            print(f"✅ Using existing database at: {self.db_path}")
+            print(f"Using existing database at: {self.db_path}")
     
     def get_connection(self):
         """Get database connection."""
@@ -217,7 +214,7 @@ class ZukunftstagDatabase:
         molecular_effect = np.random.normal(loc=3, scale=1, size=n_teams).astype(int)
         molecular_after = np.clip(molecular_before - molecular_effect, a_min=0, a_max=10)
         
-        # Assign treatments (parent gets placebo -> child gets molecular, and vice versa)
+        # Assign treatments
         parent_placebo_teams = random.sample(team_list, k=int(n_teams/2))
         
         # Store secret clinical data
@@ -258,7 +255,6 @@ class ZukunftstagDatabase:
         else:
             # Create all sessions if none exist
             self._initialize_default_sessions(cursor, conn)
-            # Default to test session
             session_id = "test_session"
         
         conn.close()
@@ -438,10 +434,9 @@ class ZukunftstagDatabase:
                 child_before = molecular_before_child
                 child_after = molecular_after_child
             
-            # Safe integer conversion - handle both int and bytes
+            # Safe integer conversion
             def safe_int(value):
                 if isinstance(value, bytes):
-                    # If it's bytes, decode or convert properly
                     try:
                         return int.from_bytes(value, byteorder='little')
                     except:
@@ -470,7 +465,7 @@ class ZukunftstagDatabase:
             if not clinical_data:
                 return False
             
-            # Use provided values if given, otherwise use pre-generated values
+            # Use provided values
             parent_before_val = parent_before if parent_before is not None else clinical_data['parent_before']
             parent_after_val = parent_after if parent_after is not None else clinical_data['parent_after']
             child_before_val = child_before if child_before is not None else clinical_data['child_before']
@@ -565,19 +560,19 @@ class ZukunftstagDatabase:
             'feedback': False
         }
         
-        # Check tech check (team registration)
+        # Check tech check
         cursor.execute("SELECT COUNT(*) FROM teams WHERE team_name = ? AND session_id = ?", (team_name, session_id))
         progress['tech_check'] = cursor.fetchone()[0] > 0
         
-        # Check Game 1, 2, 4 (single entry per team)
+        # Check Game 1, 2, 4
         for i, game in [(1, 'game1_heights'), (2, 'game2_perimeter'), (4, 'game4_clinical')]:
             cursor.execute(f"SELECT COUNT(*) FROM {game} WHERE team_name = ? AND session_id = ?", (team_name, session_id))
             progress[f'game{i}'] = cursor.fetchone()[0] > 0
         
-        # Check Game 3 (needs exactly 3 rounds completed)
+        # Check Game 3
         cursor.execute("SELECT COUNT(*) FROM game3_memory WHERE team_name = ? AND session_id = ?", (team_name, session_id))
         game3_count = cursor.fetchone()[0]
-        progress['game3'] = game3_count == 3  # Must be exactly 3 rounds
+        progress['game3'] = game3_count == 3
         
         # Check feedback
         cursor.execute("SELECT COUNT(*) FROM feedback WHERE team_name = ? AND session_id = ?", (team_name, session_id))

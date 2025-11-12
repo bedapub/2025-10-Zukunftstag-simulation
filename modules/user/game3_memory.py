@@ -70,9 +70,9 @@ def show_memory_round(db: ZukunftstagDatabase, team_name: str, questions: list, 
             else:
                 # Save answer
                 success = db.save_game3_data(
-                    team_name, 
-                    round_num, 
-                    current_question['correct'], 
+                    team_name,
+                    round_num,
+                    current_question['correct'],
                     answer
                 )
                 

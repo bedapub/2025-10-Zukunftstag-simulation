@@ -17,13 +17,11 @@ def show_game4_analysis(db):
                            "Teams will appear here after completing Tech Check. Analysis will update as teams complete the clinical trial simulation.")
         return
     
-    # Get clinical data (refresh from database)
+    # Get clinical data
     clinical_data = db.get_game_data(4)
     
     # Only show analysis if there's data
     if len(clinical_data) == 0:
-        st.info("📊 Statistics and visualizations will appear once teams complete the clinical trial simulation.")
-        # Show data table at the end even if no data yet
         _show_editable_data_table(db, teams_data, clinical_data)
         return
     
@@ -75,10 +73,10 @@ def _show_editable_data_table(db, teams_data, clinical_data):
     st.markdown("---")
     st.markdown("#### Data Table (Editable)")
     
-    # Prepare data for editing - always refresh from database
+    # Prepare data for editing
     edit_data = teams_data[['team_name', 'parent_name', 'child_name']].copy()
     
-    # Add clinical trial columns - merge fresh data from database
+    # Add clinical trial columns
     if len(clinical_data) > 0:
         edit_data = edit_data.merge(
             clinical_data[['team_name', 'parent_before', 'parent_after', 'child_before', 'child_after']], 
