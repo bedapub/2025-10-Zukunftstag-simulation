@@ -80,21 +80,21 @@ def get_molecule_questions():
             "molecule": "Aspirin",
             "description": "Pain reliever and anti-inflammatory",
             "options": ["A", "B", "C", "D"],
-            "correct": "A"
+            "correct": "C"
         },
         {
             "round": 2,
             "molecule": "Glutathione",
             "description": "Antioxidant that protects cells",
             "options": ["A", "B", "C", "D"],
-            "correct": "B"
+            "correct": "A"
         },
         {
             "round": 3,
             "molecule": "Dopamine",
             "description": "Neurotransmitter for movement and mood",
             "options": ["A", "B", "C", "D"],
-            "correct": "C"
+            "correct": "D"
         }
     ]
 

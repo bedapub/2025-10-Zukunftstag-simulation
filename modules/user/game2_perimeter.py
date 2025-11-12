@@ -5,7 +5,7 @@ from utils.helpers import (
     validate_perimeter, show_error_message, show_success_message
 )
 
-GROUND_TRUTH_PERIMETER = 28.0
+GROUND_TRUTH_PERIMETER = 61.4
 
 def show_game2_page(db: ZukunftstagDatabase):
     """Display Game 2: Room perimeter estimation."""
