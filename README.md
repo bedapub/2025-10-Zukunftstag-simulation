@@ -4,7 +4,62 @@ Jitao David Zhang, Rigani Jegatheeswaran, and David Weber
 
 Ein Workshop für [Roche's Zukunftstag 2025](https://www.roche-registration.ch/zukunftstag-2025), in Zusammenarbeit mit dem Verein *WissensZukunft*.
 
-## Setup the dependencies
+## How to start
+
+### 1. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Initialize Database for testing
+```bash
+python scripts/generate_test_data.py
+
+python scripts/check_session.py
+
+python scripts/generate_qr_codes.py
+```
+
+### 3. Run the App
+```bash
+python -m streamlit run app.py --server.port 8504
+```
+
+### 4. Development Mode Features
+
+**Current configuration (DEV_MODE = True):**
+- **Three sessions created automatically** on first start:
+  - `test_session` - Active by default, can be populated with test data
+  - `morning_session` - Empty, for live morning workshop
+  - `afternoon_session` - Empty, for live afternoon workshop
+- Teams select from dropdown (no QR code scanning needed)
+- Switch sessions in Admin Dashboard → Session Management
+
+**Admin Dashboard**: http://localhost:8501 → Enter password
+
+**Switch Sessions**: Admin Dashboard → Session Management → Select session
+
+### 5. Session Structure
+
+| Session | Purpose |
+|---------|---------|
+| `test_session` | Testing with pre-populated data |
+| `morning_session` | Live morning workshop |
+| `afternoon_session` | Live afternoon workshop |
+
+**In development (DEV_MODE=True):**
+- Teams select from dropdown (no QR code scanning needed)
+- All three sessions available
+- Switch between sessions in Admin Dashboard
+
+**In production (DEV_MODE=False):**
+- Teams MUST scan QR codes on tables
+- Each table has unique QR code with team name
+- Morning/afternoon sessions separated
+
+---
+
+## Setup the dependencies (Jupyter Notebook)
 
 I tried two ways to setup the dependencies, i.e. the packages required by the Jupyter notebook, and either should work. You can choose whichever that fits you.
 
