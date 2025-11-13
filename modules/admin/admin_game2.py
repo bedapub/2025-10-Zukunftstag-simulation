@@ -144,7 +144,7 @@ def _show_histogram(perimeter_data):
     ))
     
     # Add ground truth line
-    actual_perimeter = 28
+    actual_perimeter = 61.4
     fig.add_vline(x=actual_perimeter, line_dash="solid", line_color=config.COLOR_ERROR, 
                   annotation_text=f"Actual: {actual_perimeter}m", line_width=3)
     
@@ -225,8 +225,8 @@ def _show_boxplot(perimeter_data):
         boxmean=True
     ))
     
-    fig.add_hline(y=28, line_dash="solid", line_color="red",
-                annotation_text="Actual: 28m", line_width=3)
+    fig.add_hline(y=61.4, line_dash="solid", line_color="red",
+                annotation_text="Actual: 61.4m", line_width=3)
     
     fig.update_layout(
         title="Umfangsschätzungen Vergleich",

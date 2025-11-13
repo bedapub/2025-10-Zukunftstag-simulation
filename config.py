@@ -20,7 +20,7 @@ SESSION_OPTIONS = {
 }
 
 # Game constants
-PERIMETER_GROUND_TRUTH = 28.0  # m
+PERIMETER_GROUND_TRUTH = 61.4  # m
 MEMORY_GAME_TOTAL_ROUNDS = 3
 
 # Validation constraints

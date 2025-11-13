@@ -395,6 +395,35 @@ class ZukunftstagDatabase:
             st.error(f"Error saving memory game data: {e}")
             return False
     
+    def update_game3_correct_answers(self) -> bool:
+        """Update game3_memory table with new correct answers and recalculate is_correct."""
+        try:
+            from utils.helpers import get_molecule_questions
+            questions = get_molecule_questions()
+            
+            conn = self.get_connection()
+            cursor = conn.cursor()
+            
+            # Update each round with the new correct answer
+            for question in questions:
+                round_num = question['round']
+                new_correct_answer = question['correct']
+                
+                # Update the correct_answer and recalculate is_correct
+                cursor.execute('''
+                    UPDATE game3_memory 
+                    SET correct_answer = ?,
+                        is_correct = CASE WHEN team_answer = ? THEN 1 ELSE 0 END
+                    WHERE round_number = ?
+                ''', (new_correct_answer, new_correct_answer, round_num))
+            
+            conn.commit()
+            conn.close()
+            return True
+        except Exception as e:
+            print(f"Error updating game3 correct answers: {e}")
+            return False
+    
     def get_clinical_trial_data(self, team_name: str) -> Dict:
         """Get clinical trial data for a team."""
         conn = self.get_connection()

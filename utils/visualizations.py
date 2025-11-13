@@ -217,7 +217,7 @@ def create_boxplot(df, value_cols, titles, ground_truth=None):
     
     return fig
 
-def create_perimeter_ranking_chart(df, ground_truth=28):
+def create_perimeter_ranking_chart(df, ground_truth=61.4):
     """Create ranking chart for perimeter estimates."""
     df_sorted = df.sort_values('parent_abs_delta')
     

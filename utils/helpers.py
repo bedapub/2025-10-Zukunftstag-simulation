@@ -77,22 +77,22 @@ def get_molecule_questions():
     return [
         {
             "round": 1,
-            "molecule": "Aspirin",
-            "description": "Pain reliever and anti-inflammatory",
+            "molecule": "Molecule 1",
+            "description": "First molecule structure",
             "options": ["A", "B", "C", "D"],
             "correct": "C"
         },
         {
             "round": 2,
-            "molecule": "Glutathione",
-            "description": "Antioxidant that protects cells",
+            "molecule": "Molecule 2",
+            "description": "Second molecule structure",
             "options": ["A", "B", "C", "D"],
             "correct": "A"
         },
         {
             "round": 3,
-            "molecule": "Dopamine",
-            "description": "Neurotransmitter for movement and mood",
+            "molecule": "Molecule 3",
+            "description": "Third molecule structure",
             "options": ["A", "B", "C", "D"],
             "correct": "D"
         }

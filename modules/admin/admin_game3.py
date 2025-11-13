@@ -155,6 +155,10 @@ def _show_answer_distribution_per_round(memory_data):
     """Show which teams chose which answers for each round."""
     st.markdown("**Antwortverteilung: Welche Teams haben A, B, C, D für jede Runde gewählt**")
     
+    # Get current correct answers from the questions definition
+    from utils.helpers import get_molecule_questions
+    questions = get_molecule_questions()
+    
     rounds = sorted(memory_data['round_number'].unique())
     
     # Initialize session state for showing answers
@@ -185,8 +189,8 @@ def _show_answer_distribution_per_round(memory_data):
         # Create bar chart
         fig = go.Figure()
         
-        # Get correct answer
-        correct_answer = round_data['correct_answer'].iloc[0] if len(round_data) > 0 else None
+        # Get correct answer from current questions definition (not from old database data)
+        correct_answer = questions[int(round_num) - 1]['correct'] if int(round_num) <= len(questions) else None
         
         # Use colors based on whether answer is revealed
         if show_answer:
